@@ -1,4 +1,4 @@
-# CloudPulse (Infravision)
+# Infravision
 
 ## Overview
 CloudPulse is a cloud infrastructure analytics platform that helps identify engineering activities responsible for cloud cost spikes.
