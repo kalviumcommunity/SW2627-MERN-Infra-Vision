@@ -1,0 +1,5 @@
+BillingID,ProjectID,CloudService,InfrastructureCost,CPUUsage
+101,P001,AWS,1200,75
+102,P002,Azure,1800,82
+103,P003,GCP,900,60
+104,P001,AWS,1200,75
