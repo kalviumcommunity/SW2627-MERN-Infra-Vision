@@ -46,8 +46,10 @@ def profile_data(df):
     """
     report = profile_dataframe(df)
 
+    # Display summary in terminal
     print_profile_summary(report)
 
+    # Save reports
     save_profile_report(report, PROFILE_JSON)
     save_issues_report(report["issues"], ISSUES_CSV)
 
@@ -58,9 +60,16 @@ def profile_data(df):
 
 
 def main():
+    # Step 1: Load the dataset
     data = ingest_data(INPUT_FILE)
+
+    # Step 2: Profile the raw dataset before cleaning
     profile_data(data)
+
+    # Step 3: Clean the dataset
     processed_data = process_data(data)
+
+    # Step 4: Save cleaned dataset
     output_results(processed_data, OUTPUT_FILE)
 
 
