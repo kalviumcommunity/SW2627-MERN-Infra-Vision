@@ -1,0 +1,17 @@
+[
+    {
+        "Name": "Rahul",
+        "Marks": 95,
+        "Branch": "CSE"
+    },
+    {
+        "Name": "Anjali",
+        "Marks": 82,
+        "Branch": "IT"
+    },
+    {
+        "Name": "Kiran",
+        "Marks": 91,
+        "Branch": "CSE"
+    }
+]

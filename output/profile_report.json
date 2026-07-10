@@ -1,0 +1,226 @@
+{
+  "summary": {
+    "BillingID": {
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": 101,
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": 102,
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": 103,
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": 104,
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    },
+    "ProjectID": {
+      "dtype": "str",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": "P001",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "value": "P002",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": "P003",
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    },
+    "CloudService": {
+      "dtype": "str",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": "AWS",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "value": "Azure",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": "GCP",
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    },
+    "InfrastructureCost": {
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": 1200,
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "value": 1800,
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": 900,
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    },
+    "CPUUsage": {
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": 75,
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "value": 82,
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": 60,
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    },
+    "_summary": {
+      "rows": 4,
+      "columns": 5,
+      "exact_duplicates": 0,
+      "duplicate_pct": 0.0
+    }
+  },
+  "numerical": {
+    "BillingID": {
+      "dtype": "int64",
+      "count": 4,
+      "null_count": 0,
+      "min": "101",
+      "max": "104",
+      "mean": 102.5,
+      "median": 102.5,
+      "std": 1.29,
+      "25%": 101.75,
+      "75%": 103.25,
+      "negative_count": 0,
+      "zero_count": 0,
+      "negative_pct": 0.0
+    },
+    "InfrastructureCost": {
+      "dtype": "int64",
+      "count": 4,
+      "null_count": 0,
+      "min": "900",
+      "max": "1800",
+      "mean": 1275.0,
+      "median": 1200.0,
+      "std": 377.49,
+      "25%": 1125.0,
+      "75%": 1350.0,
+      "negative_count": 0,
+      "zero_count": 0,
+      "negative_pct": 0.0
+    },
+    "CPUUsage": {
+      "dtype": "int64",
+      "count": 4,
+      "null_count": 0,
+      "min": "60",
+      "max": "82",
+      "mean": 73.0,
+      "median": 75.0,
+      "std": 9.27,
+      "25%": 71.25,
+      "75%": 76.75,
+      "negative_count": 0,
+      "zero_count": 0,
+      "negative_pct": 0.0
+    }
+  },
+  "categorical": {
+    "ProjectID": {
+      "dtype": "str",
+      "count": 4,
+      "null_count": 0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": "P001",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "value": "P002",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": "P003",
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    },
+    "CloudService": {
+      "dtype": "str",
+      "count": 4,
+      "null_count": 0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": "AWS",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "value": "Azure",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "value": "GCP",
+          "count": 1,
+          "pct": 25.0
+        }
+      ]
+    }
+  },
+  "issues": []
+}

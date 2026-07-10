@@ -24,6 +24,7 @@ README.md
 
 ```bash
 python scripts/workflow.py
+streamlit run main.py
 ```
 
 ## Output Files
