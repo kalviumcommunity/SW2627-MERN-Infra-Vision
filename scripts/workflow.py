@@ -1,37 +1,19 @@
-import pandas as pd
+import os
 
-INPUT_FILE = "data/raw/cloud_data.csv"
-OUTPUT_FILE = "output/processed_cloud_data.csv"
+print("=" * 60)
+print("INFRAVISION DATA PIPELINE")
+print("=" * 60)
 
+print("\nStep 1 : Data Validation")
+os.system("python scripts/validate_data.py")
 
-def ingest_data(filepath):
-    """
-    Read cloud operational data from a CSV file.
-    """
-    df = pd.read_csv(filepath)
-    print(f"Loaded {len(df)} records")
-    return df
+print("\nStep 2 : Missing Value Imputation")
+os.system("python scripts/missing_value_imputation.py")
 
+print("\nStep 3 : Data Profiling")
+os.system("python scripts/data_profiling.py")
 
-def process_data(df):
-    """
-    Clean the dataset.
-    """
-    df = df.drop_duplicates()
-    df = df.fillna(0)
-    print("Data cleaned successfully")
-    return df
+print("\nStep 4 : Data Dictionary")
+os.system("python scripts/data_dictionary.py")
 
-
-def output_results(df, filepath):
-    """
-    Save processed data to a CSV file.
-    """
-    df.to_csv(filepath, index=False)
-    print(f"Processed data saved to {filepath}")
-
-
-if __name__ == "__main__":
-    data = ingest_data(INPUT_FILE)
-    processed_data = process_data(data)
-    output_results(processed_data, OUTPUT_FILE)
+print("\nPipeline Completed Successfully!")

@@ -1,0 +1,36 @@
+DATA PROFILING REPORT
+==================================================
+
+Dataset Shape: (4, 5)
+
+Data Types:
+BillingID               int64
+ProjectID                 str
+CloudService              str
+InfrastructureCost    float64
+CPUUsage              float64
+dtype: object
+
+Missing Values:
+BillingID             0
+ProjectID             0
+CloudService          0
+InfrastructureCost    0
+CPUUsage              0
+dtype: int64
+
+Summary Statistics:
+        BillingID  ...   CPUUsage
+count    4.000000  ...   4.000000
+mean   102.500000  ...  73.000000
+std      1.290994  ...   9.273618
+min    101.000000  ...  60.000000
+25%    101.750000  ...  71.250000
+50%    102.500000  ...  75.000000
+75%    103.250000  ...  76.750000
+max    104.000000  ...  82.000000
+
+[8 rows x 3 columns]
+
+Duplicate Rows:
+0
