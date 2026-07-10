@@ -1,31 +1,35 @@
-# Infravision
+# InfraVision
 
-## Overview
-Infravision is a cloud infrastructure analytics platform that helps identify engineering activities responsible for cloud cost spikes.
+## Project Overview
+InfraVision is a data engineering project that validates, cleans, profiles, and documents cloud infrastructure billing data.
 
-## Tech Stack
-- Python
-- Pandas
-- NumPy
-- SQLite
-- Streamlit
-- Plotly
+## Features
+- Data Validation
+- Missing Value Imputation
+- Data Profiling
+- Data Dictionary Generation
 
 ## Project Structure
-- data/ - Raw and processed datasets
-- scripts/ - Python scripts
-- notebooks/ - Jupyter notebooks
-- database/ - SQLite database
-- output/ - Generated outputs
-- app/ - Application files
 
-## Setup
+```
+data/
+output/
+scripts/
+main.py
+requirements.txt
+README.md
+```
 
-1. Create a virtual environment
-2. Activate it
-3. Install dependencies:
-   pip install -r requirements.txt
+## Run the Project
 
-## Run
-
+```bash
+python scripts/workflow.py
 streamlit run main.py
+```
+
+## Output Files
+
+- output/intake_report.json
+- output/processed_cloud_data.csv
+- output/data_profile_report.txt
+- output/data_dictionary.csv

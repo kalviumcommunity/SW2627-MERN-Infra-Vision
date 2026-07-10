@@ -1,77 +1,19 @@
-import pandas as pd
+import os
 
-from profiling import (
-    profile_dataframe,
-    save_profile_report,
-    save_issues_report,
-    print_profile_summary,
-)
+print("=" * 60)
+print("INFRAVISION DATA PIPELINE")
+print("=" * 60)
 
-INPUT_FILE = "data/raw/cloud_data.csv"
-OUTPUT_FILE = "output/processed_cloud_data.csv"
-PROFILE_JSON = "output/profile_report.json"
-ISSUES_CSV = "output/profile_issues.csv"
+print("\nStep 1 : Data Validation")
+os.system("python scripts/validate_data.py")
 
+print("\nStep 2 : Missing Value Imputation")
+os.system("python scripts/missing_value_imputation.py")
 
-def ingest_data(filepath):
-    """
-    Read cloud operational data from a CSV file.
-    """
-    df = pd.read_csv(filepath)
-    print(f"Loaded {len(df)} records")
-    return df
+print("\nStep 3 : Data Profiling")
+os.system("python scripts/data_profiling.py")
 
+print("\nStep 4 : Data Dictionary")
+os.system("python scripts/data_dictionary.py")
 
-def process_data(df):
-    """
-    Clean the dataset.
-    """
-    df = df.drop_duplicates()
-    df = df.fillna(0)
-    print("Data cleaned successfully")
-    return df
-
-
-def output_results(df, filepath):
-    """
-    Save processed data to a CSV file.
-    """
-    df.to_csv(filepath, index=False)
-    print(f"Processed data saved to {filepath}")
-
-
-def profile_data(df):
-    """
-    Run profiling and generate data quality reports.
-    """
-    report = profile_dataframe(df)
-
-    # Display summary in terminal
-    print_profile_summary(report)
-
-    # Save reports
-    save_profile_report(report, PROFILE_JSON)
-    save_issues_report(report["issues"], ISSUES_CSV)
-
-    print(f"\nProfiling report saved to: {PROFILE_JSON}")
-    print(f"Issues report saved to: {ISSUES_CSV}")
-
-    return report
-
-
-def main():
-    # Step 1: Load the dataset
-    data = ingest_data(INPUT_FILE)
-
-    # Step 2: Profile the raw dataset before cleaning
-    profile_data(data)
-
-    # Step 3: Clean the dataset
-    processed_data = process_data(data)
-
-    # Step 4: Save cleaned dataset
-    output_results(processed_data, OUTPUT_FILE)
-
-
-if __name__ == "__main__":
-    main()
+print("\nPipeline Completed Successfully!")
