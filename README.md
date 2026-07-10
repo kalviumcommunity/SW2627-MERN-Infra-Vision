@@ -29,7 +29,7 @@ streamlit run main.py
 
 ## Output Files
 
-- intake_report.json
-- processed_cloud_data.csv
-- data_profile_report.txt
-- data_dictionary.csv
+- output/intake_report.json
+- output/processed_cloud_data.csv
+- output/data_profile_report.txt
+- output/data_dictionary.csv
