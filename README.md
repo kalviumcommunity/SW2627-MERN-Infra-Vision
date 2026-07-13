@@ -10,6 +10,7 @@ InfraVision is a data engineering project that validates, cleans, profiles, and 
 - Data Dictionary Generation
 - Duplicate Detection and Removal with Audit Trail
 - String Cleaning and Text Normalisation
+- Date & Time Transformation Pipeline
 
 ## Project Structure
 

@@ -19,7 +19,10 @@ os.system("python scripts/data_dictionary.py")
 print("\nStep 5 : String Cleaning")
 os.system("python scripts/string_cleaning.py")
 
-print("\nStep 6 : Deduplication")
+print("\nStep 6 : Date & Time Transformation")
+os.system("python scripts/datetime_pipeline.py")
+
+print("\nStep 7 : Deduplication")
 os.system("python scripts/deduplication.py")
 
 print("\nPipeline Completed Successfully!")
