@@ -1,5 +1,5 @@
-BillingID,ProjectID,CloudService,InfrastructureCost,CPUUsage
-101,P001,AWS,1200.0,75.0
-102,P002,Azure,1200.0,82.0
-103,P003,AWS,900.0,60.0
-104,P001,AWS,1200.0,75.0
+BillingID,ProjectID,CloudService,InfrastructureCost,CPUUsage,InfrastructureCost_is_outlier,CPUUsage_is_outlier
+101,P001,AWS,1200.0,75.0,0,0
+102,P002,Azure,1200.0,82.0,0,0
+103,P003,AWS,1012.5,63.0,0,0
+104,P001,AWS,1200.0,75.0,0,0

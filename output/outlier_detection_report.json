@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-07-13T13:49:28.396973",
+  "summary": [
+    {
+      "column": "InfrastructureCost",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    },
+    {
+      "column": "CPUUsage",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    }
+  ],
+  "numeric_columns": [
+    "BillingID",
+    "InfrastructureCost",
+    "CPUUsage"
+  ]
+}
