@@ -8,6 +8,7 @@ InfraVision is a data engineering project that validates, cleans, profiles, and 
 - Missing Value Imputation
 - Data Profiling
 - Data Dictionary Generation
+- Duplicate Detection and Removal with Audit Trail
 
 ## Project Structure
 
@@ -33,3 +34,5 @@ streamlit run main.py
 - output/processed_cloud_data.csv
 - output/data_profile_report.txt
 - output/data_dictionary.csv
+- output/removed_duplicates_audit.csv
+- output/deduplication_summary.json
