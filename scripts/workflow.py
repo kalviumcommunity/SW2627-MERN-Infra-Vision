@@ -22,7 +22,10 @@ os.system("python scripts/string_cleaning.py")
 print("\nStep 6 : Date & Time Transformation")
 os.system("python scripts/datetime_pipeline.py")
 
-print("\nStep 7 : Deduplication")
+print("\nStep 7 : Outlier Detection")
+os.system("python scripts/outlier_detection.py")
+
+print("\nStep 8 : Deduplication")
 os.system("python scripts/deduplication.py")
 
 print("\nPipeline Completed Successfully!")
