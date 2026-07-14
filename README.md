@@ -13,6 +13,7 @@ InfraVision is a data engineering project that validates, cleans, profiles, and 
 - Date & Time Transformation Pipeline
 - Outlier Detection with Statistical Methods
 - Data Consistency & Validation Rules
+- Multi-Source Merging & Join Validation
 
 ## Project Structure
 
