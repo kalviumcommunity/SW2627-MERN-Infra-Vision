@@ -28,7 +28,10 @@ os.system("python scripts/outlier_detection.py")
 print("\nStep 8 : Validation Rules")
 os.system("python scripts/validate_data_rules.py")
 
-print("\nStep 9 : Deduplication")
+print("\nStep 9 : Merge Validation")
+os.system("python scripts/merge_validation.py")
+
+print("\nStep 10 : Deduplication")
 os.system("python scripts/deduplication.py")
 
 print("\nPipeline Completed Successfully!")
