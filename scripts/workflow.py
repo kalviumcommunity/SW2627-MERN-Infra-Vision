@@ -31,7 +31,10 @@ os.system("python scripts/validate_data_rules.py")
 print("\nStep 9 : Merge Validation")
 os.system("python scripts/merge_validation.py")
 
-print("\nStep 10 : Deduplication")
+print("\nStep 10 : Feature Engineering")
+os.system("python scripts/feature_engineering.py")
+
+print("\nStep 11 : Deduplication")
 os.system("python scripts/deduplication.py")
 
 print("\nPipeline Completed Successfully!")
