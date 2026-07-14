@@ -25,7 +25,10 @@ os.system("python scripts/datetime_pipeline.py")
 print("\nStep 7 : Outlier Detection")
 os.system("python scripts/outlier_detection.py")
 
-print("\nStep 8 : Deduplication")
+print("\nStep 8 : Validation Rules")
+os.system("python scripts/validate_data_rules.py")
+
+print("\nStep 9 : Deduplication")
 os.system("python scripts/deduplication.py")
 
 print("\nPipeline Completed Successfully!")
