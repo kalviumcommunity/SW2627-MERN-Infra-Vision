@@ -1,34 +1,34 @@
 DATA PROFILING REPORT
 ==================================================
 
-Dataset Shape: (4, 5)
+Dataset Shape: (4, 9)
 
 Data Types:
-BillingID               int64
-ProjectID                 str
-CloudService              str
-InfrastructureCost    float64
-CPUUsage              float64
+BillingID                          int64
+ProjectID                            str
+CloudService                         str
+InfrastructureCost                 int64
+CPUUsage                           int64
+InfrastructureCost_normalized    float64
+InfrastructureCost_zscore        float64
+CPUUsage_normalized              float64
+CPUUsage_zscore                  float64
 dtype: object
 
 Missing Values:
-BillingID             0
-ProjectID             0
-CloudService          0
-InfrastructureCost    0
-CPUUsage              0
+BillingID                        0
+ProjectID                        0
+CloudService                     0
+InfrastructureCost               0
+CPUUsage                         0
+InfrastructureCost_normalized    0
+InfrastructureCost_zscore        0
+CPUUsage_normalized              0
+CPUUsage_zscore                  0
 dtype: int64
 
 Summary Statistics:
-        BillingID  InfrastructureCost   CPUUsage
-count    4.000000                 4.0   4.000000
-mean   102.500000              1125.0  73.000000
-std      1.290994               150.0   9.273618
-min    101.000000               900.0  60.000000
-25%    101.750000              1125.0  71.250000
-50%    102.500000              1200.0  75.000000
-75%    103.250000              1200.0  76.750000
-max    104.000000              1200.0  82.000000
+
 
 Duplicate Rows:
 0

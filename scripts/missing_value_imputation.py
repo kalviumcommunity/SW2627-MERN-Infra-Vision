@@ -1,83 +1,51 @@
-import pandas as pd
 import os
+import pandas as pd
 
-# -------------------------------
-# Load Dataset
-# -------------------------------
-df = pd.read_csv("data/raw/cloud_data.csv")
+try:
+	from .common import PROCESSED_DATA_FILE, RAW_DATA_FILE, ensure_output_dir, load_csv
+except ImportError:
+	from common import PROCESSED_DATA_FILE, RAW_DATA_FILE, ensure_output_dir, load_csv
 
-print("\n===== ORIGINAL DATASET =====")
-print(df)
+def impute_missing_values(df):
+	cleaned = df.copy()
 
-# -------------------------------
-# Add Missing Values (For Testing)
-# Remove these lines if your CSV
-# already contains missing values
-# -------------------------------
+	cleaned = cleaned.dropna(subset=["BillingID"])
 
-df.loc[1, "InfrastructureCost"] = None
-df.loc[2, "CloudService"] = None
-df.loc[3, "CPUUsage"] = None
+	if "InfrastructureCost" in cleaned.columns:
+		cleaned["InfrastructureCost"] = cleaned["InfrastructureCost"].fillna(cleaned["InfrastructureCost"].median())
 
-# -------------------------------
-# Missing Values Before
-# -------------------------------
+	if "CPUUsage" in cleaned.columns:
+		cleaned["CPUUsage"] = cleaned["CPUUsage"].fillna(cleaned["CPUUsage"].median())
 
-print("\n===== BEFORE IMPUTATION =====")
-print(df.isnull().sum())
+	if "CloudService" in cleaned.columns and not cleaned["CloudService"].mode().empty:
+		cleaned["CloudService"] = cleaned["CloudService"].fillna(cleaned["CloudService"].mode().iloc[0])
 
-# -------------------------------
-# Drop Missing BillingID
-# -------------------------------
+	return cleaned
 
-df = df.dropna(subset=["BillingID"])
 
-# -------------------------------
-# InfrastructureCost -> Median
-# -------------------------------
+def main():
+	if not RAW_DATA_FILE.exists():
+		raise FileNotFoundError(f"Input file not found: {RAW_DATA_FILE}")
 
-median_cost = df["InfrastructureCost"].median()
+	df = load_csv(RAW_DATA_FILE)
 
-df["InfrastructureCost"] = df["InfrastructureCost"].fillna(median_cost)
+	print("\n===== ORIGINAL DATASET =====")
+	print(df)
+	print("\n===== BEFORE IMPUTATION =====")
+	print(df.isnull().sum())
 
-print(f"\nInfrastructureCost filled with Median = {median_cost}")
+	cleaned = impute_missing_values(df)
 
-# -------------------------------
-# CPUUsage -> Median
-# -------------------------------
+	print("\n===== AFTER IMPUTATION =====")
+	print(cleaned.isnull().sum())
 
-median_cpu = df["CPUUsage"].median()
+	ensure_output_dir()
+	cleaned.to_csv(PROCESSED_DATA_FILE, index=False)
 
-df["CPUUsage"] = df["CPUUsage"].fillna(median_cpu)
+	print("\nDataset saved successfully!")
+	print("\n===== FINAL DATASET =====")
+	print(cleaned)
 
-print(f"CPUUsage filled with Median = {median_cpu}")
 
-# -------------------------------
-# CloudService -> Mode
-# -------------------------------
-
-mode_service = df["CloudService"].mode().iloc[0]
-
-df["CloudService"] = df["CloudService"].fillna(mode_service)
-
-print(f"CloudService filled with Mode = {mode_service}")
-
-# -------------------------------
-# Missing Values After
-# -------------------------------
-
-print("\n===== AFTER IMPUTATION =====")
-print(df.isnull().sum())
-
-# -------------------------------
-# Save Dataset
-# -------------------------------
-
-os.makedirs("output", exist_ok=True)
-
-df.to_csv("output/processed_cloud_data.csv", index=False)
-
-print("\nDataset saved successfully!")
-
-print("\n===== FINAL DATASET =====")
-print(df)
+if __name__ == "__main__":
+	main()

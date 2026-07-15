@@ -1,5 +1,1 @@
-BillingID,ProjectID,CloudService,InfrastructureCost,CPUUsage,InfrastructureCost_is_outlier,CPUUsage_is_outlier,valid_billing_id,valid_infrastructure_cost,valid_cpu_usage,valid_cloud_service,valid_reference_pair,passes_all_checks
-101,P001,AWS,1200.0,75.0,0,0,1,1,1,1,1,1
-102,P002,Azure,1200.0,82.0,0,0,1,1,1,1,1,1
-103,P003,AWS,1012.5,63.0,0,0,1,1,1,1,1,1
-104,P001,AWS,1200.0,75.0,0,0,1,1,1,1,1,1
+
