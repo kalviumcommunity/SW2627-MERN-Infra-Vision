@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-07-14T13:26:58.291427",
+  "rows_before": 4,
+  "rows_after": 4,
+  "rows_removed": 0,
+  "removal_pct": 0.0,
+  "exact_duplicates": 0,
+  "near_duplicates": 0,
+  "strategy": "keep the first exact duplicate and the most complete record for near-duplicates",
+  "key_columns": [
+    "BillingID",
+    "ProjectID"
+  ]
+}

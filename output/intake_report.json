@@ -1,10 +1,10 @@
 {
-    "timestamp": "2026-07-15T15:06:01.763135",
+
     "checks": {
         "File Exists": "File exists",
         "File Format": "CSV format verified",
         "Schema": "Schema valid",
-        "Encoding": "ascii"
+        "Encoding": "utf-8"
     },
     "Statistics": {
         "rows": 4,

@@ -78,6 +78,13 @@ If a revenue-like column is heavily right-skewed, the mean can be misleading and
 - Data Profiling
 - Distribution Analysis
 - Data Dictionary Generation
+- Duplicate Detection and Removal with Audit Trail
+- String Cleaning and Text Normalisation
+- Date & Time Transformation Pipeline
+- Outlier Detection with Statistical Methods
+- Data Consistency & Validation Rules
+- Multi-Source Merging & Join Validation
+- Feature Engineering & Derived Business Columns
 
 ## Project Structure
 
@@ -105,3 +112,5 @@ streamlit run main.py
 - output/distribution/distribution_analysis.json
 - output/distribution/*.png
 - output/data_dictionary.csv
+- output/removed_duplicates_audit.csv
+- output/deduplication_summary.json

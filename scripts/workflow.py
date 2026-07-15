@@ -21,4 +21,25 @@ for label, title, command in STEPS:
 	print(f"\n{label} : {title}")
 	subprocess.run(command, cwd=BASE_DIR, check=True)
 
+print("\nStep 5 : String Cleaning")
+os.system("python scripts/string_cleaning.py")
+
+print("\nStep 6 : Date & Time Transformation")
+os.system("python scripts/datetime_pipeline.py")
+
+print("\nStep 7 : Outlier Detection")
+os.system("python scripts/outlier_detection.py")
+
+print("\nStep 8 : Validation Rules")
+os.system("python scripts/validate_data_rules.py")
+
+print("\nStep 9 : Merge Validation")
+os.system("python scripts/merge_validation.py")
+
+print("\nStep 10 : Feature Engineering")
+os.system("python scripts/feature_engineering.py")
+
+print("\nStep 11 : Deduplication")
+os.system("python scripts/deduplication.py")
+
 print("\nPipeline Completed Successfully!")

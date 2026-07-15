@@ -1,15 +1,9 @@
 import json
-import os
-import chardet
+
 import pandas as pd
 from datetime import datetime
 
 try:
-    from .common import INTAKE_REPORT_FILE, RAW_DATA_FILE, ensure_output_dir
-except ImportError:
-    from common import INTAKE_REPORT_FILE, RAW_DATA_FILE, ensure_output_dir
-
-INPUT_FILE = RAW_DATA_FILE
 
 EXPECTED_COLUMNS = [
     "BillingID",
@@ -50,9 +44,14 @@ def validate_schema(df):
 
 def detect_encoding(filepath):
     with open(filepath, "rb") as file:
-        result = chardet.detect(file.read())
+        raw = file.read()
 
-    return result["encoding"]
+    if chardet is not None:
+        result = chardet.detect(raw)
+        if result and result.get("encoding"):
+            return result["encoding"]
+
+    return "utf-8"
 
 
 def dataset_statistics(filepath, df):

@@ -1,79 +1,107 @@
 import pandas as pd
 
-# -----------------------------
+# ============================
 # STEP 1: Read CSV
-# -----------------------------
+# ============================
+
 df = pd.read_csv("students.csv")
 
-print("Original Data")
+print("========== ORIGINAL DATA ==========")
 print(df)
 
-# -----------------------------
-# STEP 2: Show Shape
-# -----------------------------
-print("\nShape:")
+# ============================
+# STEP 2: Shape
+# ============================
+
+print("\n========== SHAPE ==========")
 print(df.shape)
 
-# -----------------------------
-# STEP 3: Show Data Types
-# -----------------------------
-print("\nData Types:")
+# ============================
+# STEP 3: Data Types Before Conversion
+# ============================
+
+print("\n========== DATA TYPES (BEFORE) ==========")
 print(df.dtypes)
 
-# -----------------------------
+# ============================
 # STEP 4: First 3 Rows
-# -----------------------------
-print("\nFirst 3 Rows")
+# ============================
+
+print("\n========== FIRST 3 ROWS ==========")
 print(df.head(3))
 
-# -----------------------------
+# ============================
 # STEP 5: Filter Students
-# -----------------------------
-high_marks = df[df["Marks"] > 85]
+# ============================
 
-print("\nStudents with Marks > 85")
+print("\n========== STUDENTS WITH MARKS > 85 ==========")
+high_marks = df[df["Marks"] > 85]
 print(high_marks)
 
-# -----------------------------
+# ============================
 # STEP 6: Average Marks
-# -----------------------------
-average = df["Marks"].mean()
+# ============================
 
-print("\nAverage Marks")
-print(average)
+print("\n========== AVERAGE MARKS ==========")
+print(df["Marks"].mean())
 
-# -----------------------------
-# STEP 7: Group By Branch
-# -----------------------------
-branch_average = df.groupby("Branch")["Marks"].mean()
+# ============================
+# STEP 7: Average Marks by Branch
+# ============================
 
-print("\nAverage Marks by Branch")
-print(branch_average)
+print("\n========== AVERAGE MARKS BY BRANCH ==========")
+print(df.groupby("Branch")["Marks"].mean())
 
-# -----------------------------
-# STEP 8: Save High Marks Report
-# -----------------------------
-high_marks.to_csv("report.csv", index=False)
+# ============================
+# STEP 8: Save Report
+# ============================
 
+df.to_csv("report.csv", index=False)
 print("\nreport.csv created successfully!")
 
-# -----------------------------
+# ============================
 # STEP 9: Read JSON
-# -----------------------------
-json_df = pd.read_json("students.json")
+# ============================
 
-print("\nJSON Data")
+print("\n========== JSON DATA ==========")
+
+json_df = pd.read_json("student.json")
 print(json_df)
 
-# -----------------------------
-# STEP 10: Ingestion Report
-# -----------------------------
-print("\n========== INGESTION REPORT ==========")
-print("Rows:", df.shape[0])
-print("Columns:", df.shape[1])
+# ====================================================
+# STEP 10: TYPE ENFORCEMENT
+# ====================================================
 
-print("\nColumn Types")
+print("\n========== BEFORE TYPE CONVERSION ==========")
 print(df.dtypes)
 
-print("\nFirst 3 Rows")
-print(df.head(3))
+# Convert Joining_Date to datetime
+df["Joining_Date"] = pd.to_datetime(
+    df["Joining_Date"],
+    format="%Y-%m-%d"
+)
+
+# Convert Fees_Paid to float
+df["Fees_Paid"] = (
+    df["Fees_Paid"]
+    .str.replace("₹", "", regex=False)
+    .str.replace(",", "", regex=False)
+    .astype(float)
+)
+
+# Convert Hosteller to Boolean
+df["Hosteller"] = df["Hosteller"].astype(bool)
+
+print("\n========== AFTER TYPE CONVERSION ==========")
+print(df.dtypes)
+
+print("\n========== UPDATED DATA ==========")
+print(df)
+
+# ============================
+# STEP 11: Save Updated Report
+# ============================
+
+df.to_csv("report.csv", index=False)
+
+print("\nUpdated report.csv created successfully!")
