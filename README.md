@@ -57,10 +57,26 @@ print(f"Speedup: {loop_time / vec_time:.0f}x")
 
 The main takeaway is simple: use Pandas for dataframe structure, but move numeric transformations into NumPy whenever performance matters.
 
+## Distribution Analysis for Business Trends
+
+After optimization, the next step is understanding whether a numeric column is symmetric, skewed, heavy-tailed, or multi-segment. This project now includes a distribution-analysis script that computes skewness and kurtosis, saves histogram plus KDE plots, and compares low-value and high-value segments for numeric columns in the processed dataset.
+
+### What It Produces
+
+- Skewness and kurtosis for every numeric column
+- Histogram and KDE plots saved under `output/distribution/`
+- A segment comparison chart for the first numeric column
+- A JSON summary with business-facing interpretation notes
+
+### Why It Matters
+
+If a revenue-like column is heavily right-skewed, the mean can be misleading and the median becomes a better business summary. If the distribution looks bimodal or the low/high segments differ sharply, that usually points to different customer groups or product tiers that should be analyzed separately.
+
 ## Features
 - Data Validation
 - Missing Value Imputation
 - Data Profiling
+- Distribution Analysis
 - Data Dictionary Generation
 
 ## Project Structure
@@ -86,4 +102,6 @@ streamlit run main.py
 - output/intake_report.json
 - output/processed_cloud_data.csv
 - output/data_profile_report.txt
+- output/distribution/distribution_analysis.json
+- output/distribution/*.png
 - output/data_dictionary.csv
