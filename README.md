@@ -62,6 +62,13 @@ The main takeaway is simple: use Pandas for dataframe structure, but move numeri
 - Missing Value Imputation
 - Data Profiling
 - Data Dictionary Generation
+- Duplicate Detection and Removal with Audit Trail
+- String Cleaning and Text Normalisation
+- Date & Time Transformation Pipeline
+- Outlier Detection with Statistical Methods
+- Data Consistency & Validation Rules
+- Multi-Source Merging & Join Validation
+- Feature Engineering & Derived Business Columns
 
 ## Project Structure
 
@@ -87,3 +94,5 @@ streamlit run main.py
 - output/processed_cloud_data.csv
 - output/data_profile_report.txt
 - output/data_dictionary.csv
+- output/removed_duplicates_audit.csv
+- output/deduplication_summary.json

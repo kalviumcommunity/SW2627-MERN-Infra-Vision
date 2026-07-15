@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-07-14T13:26:54.942931",
+  "join_type": "left",
+  "left_rows": 3,
+  "right_rows": 3,
+  "merged_rows": 3,
+  "row_change": 0,
+  "unmatched_left_rows": 1,
+  "unmatched_right_rows": 1,
+  "notes": "Left join used to preserve left-table records and validate unmatched right-side keys."
+}

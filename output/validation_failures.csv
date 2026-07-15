@@ -1,0 +1,1 @@
+BillingID,ProjectID,CloudService,InfrastructureCost,CPUUsage,InfrastructureCost_is_outlier,CPUUsage_is_outlier,valid_billing_id,valid_infrastructure_cost,valid_cpu_usage,valid_cloud_service,valid_reference_pair,passes_all_checks
