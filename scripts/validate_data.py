@@ -1,10 +1,15 @@
-import os
 import json
+import os
 import chardet
 import pandas as pd
 from datetime import datetime
 
-INPUT_FILE = "data/raw/cloud_data.csv"
+try:
+    from .common import INTAKE_REPORT_FILE, RAW_DATA_FILE, ensure_output_dir
+except ImportError:
+    from common import INTAKE_REPORT_FILE, RAW_DATA_FILE, ensure_output_dir
+
+INPUT_FILE = RAW_DATA_FILE
 
 EXPECTED_COLUMNS = [
     "BillingID",
@@ -26,7 +31,7 @@ def validate_file_exists(filepath):
 
 
 def validate_file_format(filepath):
-    extension = filepath.split(".")[-1].lower()
+    extension = filepath.suffix.lower().lstrip(".")
 
     if extension not in ["csv"]:
         return False, "Unsupported file format"
@@ -86,10 +91,10 @@ def generate_report():
 
     report["Statistics"] = dataset_statistics(INPUT_FILE, df)
 
-    os.makedirs("output", exist_ok=True)
+    ensure_output_dir()
 
-    with open("output/intake_report.json","w") as file:
-        json.dump(report,file,indent=4)
+    with open(INTAKE_REPORT_FILE, "w", encoding="utf-8") as file:
+        json.dump(report, file, indent=4)
 
     return report
 

@@ -1,41 +1,56 @@
-import pandas as pd
 import os
+import pandas as pd
 
-# Load the cleaned dataset
-df = pd.read_csv("output/processed_cloud_data.csv")
+try:
+    from .common import DATA_DICTIONARY_FILE, PROCESSED_DATA_FILE, ensure_output_dir, load_csv
+except ImportError:
+    from common import DATA_DICTIONARY_FILE, PROCESSED_DATA_FILE, ensure_output_dir, load_csv
 
-print("=" * 60)
-print("DATA DICTIONARY")
-print("=" * 60)
+def build_dictionary(df):
+    dictionary = []
 
-dictionary = []
+    for column in df.columns:
+        data_type = str(df[column].dtype)
 
-for column in df.columns:
+        if data_type == "object":
+            business_type = "Categorical"
+        elif "int" in data_type or "float" in data_type:
+            business_type = "Numerical"
+        else:
+            business_type = "Other"
 
-    data_type = str(df[column].dtype)
+        dictionary.append(
+            {
+                "Column Name": column,
+                "Data Type": data_type,
+                "Business Type": business_type,
+                "Missing Values": df[column].isnull().sum(),
+                "Unique Values": df[column].nunique(),
+                "Description": "",
+            }
+        )
 
-    if data_type == "object":
-        business_type = "Categorical"
-    elif "int" in data_type or "float" in data_type:
-        business_type = "Numerical"
-    else:
-        business_type = "Other"
+    return pd.DataFrame(dictionary)
 
-    dictionary.append({
-        "Column Name": column,
-        "Data Type": data_type,
-        "Business Type": business_type,
-        "Missing Values": df[column].isnull().sum(),
-        "Unique Values": df[column].nunique(),
-        "Description": ""
-    })
 
-dictionary_df = pd.DataFrame(dictionary)
+def main():
+    if not PROCESSED_DATA_FILE.exists():
+        raise FileNotFoundError(f"Input file not found: {PROCESSED_DATA_FILE}")
 
-print(dictionary_df)
+    df = load_csv(PROCESSED_DATA_FILE)
 
-os.makedirs("output", exist_ok=True)
+    print("=" * 60)
+    print("DATA DICTIONARY")
+    print("=" * 60)
 
-dictionary_df.to_csv("output/data_dictionary.csv", index=False)
+    dictionary_df = build_dictionary(df)
+    print(dictionary_df)
 
-print("\nData Dictionary saved successfully!")
+    ensure_output_dir()
+    dictionary_df.to_csv(DATA_DICTIONARY_FILE, index=False)
+
+    print("\nData Dictionary saved successfully!")
+
+
+if __name__ == "__main__":
+    main()
