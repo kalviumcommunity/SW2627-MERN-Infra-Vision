@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-14T13:26:48.375641",
+  "timestamp": "2026-07-16T09:17:54.891475",
   "columns_cleaned": [
     "CloudService",
     "ProjectID"
@@ -15,7 +15,7 @@
         "ProjectID": "P002"
       },
       {
-        "CloudService": "AWS",
+        "CloudService": "GCP",
         "ProjectID": "P003"
       },
       {
@@ -33,7 +33,7 @@
         "ProjectID": "P002"
       },
       {
-        "CloudService": "AWS",
+        "CloudService": "GCP",
         "ProjectID": "P003"
       },
       {
