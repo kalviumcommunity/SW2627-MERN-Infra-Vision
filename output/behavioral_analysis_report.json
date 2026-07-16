@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-07-16T14:24:23.036906",
+  "segment_count": 3,
+  "top_segment": "Enterprise",
+  "bottom_segment": "Enterprise",
+  "highest_churn_segment": "Enterprise",
+  "lowest_churn_segment": "Enterprise",
+  "summary_columns": [
+    "customer_type",
+    "avg_ltv",
+    "churn_rate",
+    "avg_tickets",
+    "customer_count",
+    "avg_ltv_formatted",
+    "churn_rate_formatted"
+  ],
+  "heatmap_shape": [
+    3,
+    3
+  ]
+}

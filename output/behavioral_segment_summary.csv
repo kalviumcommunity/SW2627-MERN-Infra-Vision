@@ -1,0 +1,4 @@
+customer_type,avg_ltv,churn_rate,avg_tickets,customer_count,avg_ltv_formatted,churn_rate_formatted
+Enterprise,0.0,0.0,0.0,1,$0,0.0%
+SMB,0.0,0.0,0.0,1,$0,0.0%
+Startup,0.0,0.0,0.0,1,$0,0.0%
