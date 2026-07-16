@@ -69,6 +69,7 @@ The main takeaway is simple: use Pandas for dataframe structure, but move numeri
 - Data Consistency & Validation Rules
 - Multi-Source Merging & Join Validation
 - Feature Engineering & Derived Business Columns
+- Correlation & Relationship Analysis
 
 ## Project Structure
 
