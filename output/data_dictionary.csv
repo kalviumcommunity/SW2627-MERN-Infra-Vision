@@ -1,0 +1,10 @@
+Column Name,Data Type,Business Type,Missing Values,Unique Values,Description
+BillingID,int64,Numerical,0,4,
+ProjectID,str,Other,0,3,
+CloudService,str,Other,0,3,
+InfrastructureCost,int64,Numerical,0,3,
+CPUUsage,int64,Numerical,0,3,
+InfrastructureCost_normalized,float64,Numerical,0,3,
+InfrastructureCost_zscore,float64,Numerical,0,3,
+CPUUsage_normalized,float64,Numerical,0,3,
+CPUUsage_zscore,float64,Numerical,0,3,

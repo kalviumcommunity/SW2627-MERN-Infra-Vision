@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-07-16T09:18:01.412511",
+  "records": 4,
+  "passed": 4,
+  "failed": 0,
+  "rules": [
+    {
+      "rule": "BillingID is present and positive",
+      "passed": 4,
+      "failed": 0,
+      "status": "pass"
+    },
+    {
+      "rule": "InfrastructureCost is non-negative",
+      "passed": 4,
+      "failed": 0,
+      "status": "pass"
+    },
+    {
+      "rule": "CPUUsage is between 0 and 100",
+      "passed": 4,
+      "failed": 0,
+      "status": "pass"
+    },
+    {
+      "rule": "CloudService is not empty",
+      "passed": 4,
+      "failed": 0,
+      "status": "pass"
+    },
+    {
+      "rule": "BillingID and ProjectID are present together",
+      "passed": 4,
+      "failed": 0,
+      "status": "pass"
+    }
+  ]
+}

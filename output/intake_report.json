@@ -1,0 +1,14 @@
+{
+    "timestamp": "2026-07-16T09:17:43.282982",
+    "checks": {
+        "File Exists": "File exists",
+        "File Format": "CSV format verified",
+        "Schema": "Schema valid",
+        "Encoding": "utf-8"
+    },
+    "Statistics": {
+        "rows": 4,
+        "columns": 5,
+        "file_size_mb": 0.0001
+    }
+}

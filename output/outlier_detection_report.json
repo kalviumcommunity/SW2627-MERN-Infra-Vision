@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-07-16T09:17:59.169051",
+  "summary": [
+    {
+      "column": "InfrastructureCost",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    },
+    {
+      "column": "CPUUsage",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    },
+    {
+      "column": "InfrastructureCost_normalized",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    },
+    {
+      "column": "InfrastructureCost_zscore",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    },
+    {
+      "column": "CPUUsage_normalized",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    },
+    {
+      "column": "CPUUsage_zscore",
+      "method": "IQR + z-score",
+      "action": "capped",
+      "outlier_count": 1,
+      "reason": "values beyond IQR bounds were capped to preserve rows"
+    }
+  ],
+  "numeric_columns": [
+    "BillingID",
+    "InfrastructureCost",
+    "CPUUsage",
+    "InfrastructureCost_normalized",
+    "InfrastructureCost_zscore",
+    "CPUUsage_normalized",
+    "CPUUsage_zscore"
+  ]
+}
