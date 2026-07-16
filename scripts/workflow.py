@@ -58,6 +58,75 @@ def profile_data(df):
 
     return report
 
+def segment_analysis(df):
+    """
+    Perform GroupBy and aggregation analysis.
+    """
+
+    print("\n========== SEGMENT ANALYSIS ==========")
+
+    # Average CPU Usage by Cloud Service
+    print("\nAverage CPU Usage by Cloud Service")
+    print(df.groupby("CloudService")["CPUUsage"].mean())
+
+    # Total Infrastructure Cost by Cloud Service
+    print("\nTotal Infrastructure Cost by Cloud Service")
+    print(df.groupby("CloudService")["InfrastructureCost"].sum())
+
+    # Count Projects by Cloud Service
+    print("\nProject Count by Cloud Service")
+    print(df.groupby("CloudService")["ProjectID"].count())
+
+    # Multiple Aggregations
+    summary = df.groupby("CloudService").agg({
+        "InfrastructureCost": "sum",
+        "CPUUsage": "mean",
+        "ProjectID": "count"
+    })
+
+    summary.columns = [
+        "Total_Cost",
+        "Average_CPU",
+        "Project_Count"
+    ]
+
+    print("\nCloud Service Summary")
+    print(summary)
+
+    # Ranking
+    summary["CPU_Rank"] = summary["Average_CPU"].rank(ascending=False)
+
+    print("\nRanked Summary")
+    print(summary.sort_values("Average_CPU", ascending=False))
+
+    # Group by two columns
+    print("\nCloud Service and Project Analysis")
+    print(df.groupby(["CloudService", "ProjectID"])["InfrastructureCost"].sum())
+
+    # Pivot Table
+    pivot = pd.pivot_table(
+        df,
+        values="InfrastructureCost",
+        index="CloudService",
+        columns="ProjectID",
+        aggfunc="sum"
+    )
+
+    print("\nPivot Table")
+    print(pivot)
+
+    # Transform
+    df["Avg_CPU_By_Service"] = df.groupby(
+        "CloudService"
+    )["CPUUsage"].transform("mean")
+
+    print("\nDataset with Avg CPU")
+    print(df)
+
+    # Apply
+    print("\nHighest Infrastructure Cost")
+    print(df.groupby("CloudService")["InfrastructureCost"].apply(lambda x: x.max()))
+
 
 def main():
     # Step 1: Load the dataset
@@ -69,8 +138,13 @@ def main():
     # Step 3: Clean the dataset
     processed_data = process_data(data)
 
-    # Step 4: Save cleaned dataset
-    output_results(processed_data, OUTPUT_FILE)
+   processed_data = process_data(data)
+
+   # Step 4: Segment Analysis
+segment_analysis(processed_data)
+
+# Step 5: Save cleaned dataset
+output_results(processed_data, OUTPUT_FILE)
 
 
 if __name__ == "__main__":
