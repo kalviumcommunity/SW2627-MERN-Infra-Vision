@@ -29,7 +29,8 @@ extra_steps = [
     ("Step 11", "Feature Engineering", [sys.executable, str(BASE_DIR / "scripts" / "feature_engineering.py")]),
     ("Step 12", "Correlation Analysis", [sys.executable, str(BASE_DIR / "scripts" / "correlation_analysis.py")]),
     ("Step 13", "Segment Analysis", [sys.executable, str(BASE_DIR / "scripts" / "segment_analysis.py")]),
-    ("Step 14", "Deduplication", [sys.executable, str(BASE_DIR / "scripts" / "deduplication.py")]),
+    ("Step 14", "Time-Series Analysis", [sys.executable, str(BASE_DIR / "scripts" / "time_series_analysis.py")]),
+    ("Step 15", "Deduplication", [sys.executable, str(BASE_DIR / "scripts" / "deduplication.py")]),
 ]
 
 for label, title, command in extra_steps:
