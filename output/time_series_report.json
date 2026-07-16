@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-07-16T14:15:46.228311",
+  "row_count": 3,
+  "trend_label": "flat",
+  "latest_monthly_revenue": 0.0,
+  "latest_monthly_change_pct": NaN,
+  "rolling_window": 7,
+  "inflection_points": [],
+  "summary_columns": [
+    "month",
+    "monthly_revenue",
+    "monthly_change_pct"
+  ]
+}
