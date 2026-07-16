@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-07-16T13:56:27.590574",
+  "segment_count": 1,
+  "insights": [
+    "Unknown leads on total cost with 0.00 and an average CPU of 0.00.",
+    "Unknown has the highest average CPU usage at 0.00, making it the main optimization target.",
+    "The segment summary contains 1 service groups and 3 project-level combinations."
+  ],
+  "top_segment": {
+    "name": "Unknown",
+    "total_cost": 0.0,
+    "average_cpu": 0.0
+  },
+  "priority_segment": {
+    "name": "Unknown",
+    "average_cpu": 0.0
+  },
+  "summary_columns": [
+    "CloudService",
+    "total_cost",
+    "average_cpu",
+    "project_count",
+    "average_cost_per_project",
+    "cost_rank",
+    "cpu_rank",
+    "cost_share",
+    "opportunity_flag"
+  ],
+  "pivot_shape": [
+    1,
+    3
+  ]
+}
