@@ -33,7 +33,8 @@ extra_steps = [
     ("Step 15", "Behavioral Analysis", [sys.executable, str(BASE_DIR / "scripts" / "behavioral_analysis.py")]),
     ("Step 16", "Funnel Analysis", [sys.executable, str(BASE_DIR / "scripts" / "funnel_analysis.py")]),
     ("Step 17", "KPI Analysis", [sys.executable, str(BASE_DIR / "scripts" / "kpi_analysis.py")]),
-    ("Step 18", "Deduplication", [sys.executable, str(BASE_DIR / "scripts" / "deduplication.py")]),
+    ("Step 18", "Root Cause Analysis", [sys.executable, str(BASE_DIR / "scripts" / "root_cause_analysis.py")]),
+    ("Step 19", "Deduplication", [sys.executable, str(BASE_DIR / "scripts" / "deduplication.py")]),
 ]
 
 for label, title, command in extra_steps:
