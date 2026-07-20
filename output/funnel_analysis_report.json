@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-07-20T13:16:22.805158",
+  "stages": {
+    "Sign Up": 0,
+    "Email Verified": 0,
+    "Payment Added": 0,
+    "First Purchase": 0
+  },
+  "biggest_leak": {
+    "from": "Sign Up",
+    "to": "Email Verified",
+    "lost": 0,
+    "drop_rate_pct": 0.0
+  },
+  "drop_off_table": [
+    {
+      "from": "Sign Up",
+      "to": "Email Verified",
+      "lost": 0,
+      "drop_rate_pct": 0.0,
+      "potential_recovery": 0,
+      "priority_score": 0.0
+    },
+    {
+      "from": "Email Verified",
+      "to": "Payment Added",
+      "lost": 0,
+      "drop_rate_pct": 0.0,
+      "potential_recovery": 0,
+      "priority_score": 0.0
+    },
+    {
+      "from": "Payment Added",
+      "to": "First Purchase",
+      "lost": 0,
+      "drop_rate_pct": 0.0,
+      "potential_recovery": 0,
+      "priority_score": 0.0
+    }
+  ]
+}
