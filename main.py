@@ -105,3 +105,58 @@ print(df)
 df.to_csv("report.csv", index=False)
 
 print("\nUpdated report.csv created successfully!")
+
+# ============================
+# STEP 12: Threshold Alerts
+# ============================
+
+print("\n========== THRESHOLD ALERTS ==========")
+
+alerts = []
+
+# Marks Threshold
+for index, row in df.iterrows():
+    if row["Marks"] < 35:
+        alerts.append(f"{row['Name']} has very low marks: {row['Marks']}")
+    elif row["Marks"] > 90:
+        alerts.append(f"{row['Name']} has exceptionally high marks: {row['Marks']}")
+
+# Fees Threshold
+for index, row in df.iterrows():
+    if row["Fees_Paid"] < 35000:
+        alerts.append(f"{row['Name']} has unusually low fees paid: {row['Fees_Paid']}")
+
+if alerts:
+    for alert in alerts:
+        print(alert)
+else:
+    print("No threshold alerts.")
+
+
+# ============================
+# STEP 13: Z-Score Anomaly Detection
+# ============================
+
+import numpy as np
+
+print("\n========== ANOMALY DETECTION ==========")
+
+mean = df["Marks"].mean()
+std = df["Marks"].std()
+
+df["Z_Score"] = (df["Marks"] - mean) / std
+
+anomalies = df[np.abs(df["Z_Score"]) > 1]
+
+if anomalies.empty:
+    print("No anomalies detected.")
+else:
+    print(anomalies[["Name", "Marks", "Z_Score"]])
+
+# ============================
+# STEP 14: Save Anomalies
+# ============================
+
+anomalies.to_csv("anomalies.csv", index=False)
+
+print("\nanomalies.csv created successfully!")    
