@@ -244,3 +244,26 @@ for file in queries:
     result = pd.read_sql(query, engine)
 
     print(result)    
+
+# ============================
+# STEP 21: SQL Filtering & Aggregation
+# ============================
+
+sql_files = [
+    "queries/where_query.sql",
+    "queries/having_query.sql",
+    "queries/where_having_query.sql",
+    "queries/order_by_query.sql"
+]
+
+for file in sql_files:
+    print("\n==============================")
+    print(file)
+    print("==============================")
+
+    with open(file, "r") as f:
+        query = f.read()
+
+    result = pd.read_sql(query, engine)
+
+    print(result)    
