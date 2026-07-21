@@ -1,5 +1,10 @@
 import pandas as pd
+import numpy as np
+from sqlalchemy import create_engine, inspect
 
+# ============================
+# STEP 1: Read CSV
+# ============================
 # ============================
 # STEP 1: Read CSV
 # ============================
@@ -160,3 +165,63 @@ else:
 anomalies.to_csv("anomalies.csv", index=False)
 
 print("\nanomalies.csv created successfully!")    
+
+# ============================
+# STEP 15: Create SQLite Database
+# ============================
+
+engine = create_engine("sqlite:///analytics.db")
+
+print("\nDatabase created successfully!")
+
+# ============================
+# STEP 16: Store Data in Database
+# ============================
+
+df.to_sql(
+    "students_cleaned",
+    con=engine,
+    if_exists="replace",
+    index=False
+)
+
+print("students_cleaned table created successfully!")
+
+# ============================
+# STEP 17: Read Data from SQL
+# ============================
+
+query = "SELECT * FROM students_cleaned"
+
+sql_df = pd.read_sql(query, engine)
+
+print("\n========== DATA FROM DATABASE ==========")
+print(sql_df)
+
+# ============================
+# STEP 18: SQL Query
+# ============================
+
+query = """
+SELECT *
+FROM students_cleaned
+WHERE Marks > 85
+"""
+
+high_marks = pd.read_sql(query, engine)
+
+print("\n========== STUDENTS WITH MARKS > 85 ==========")
+print(high_marks)
+
+# ============================
+# STEP 19: Validate Schema
+# ============================
+
+inspector = inspect(engine)
+
+columns = inspector.get_columns("students_cleaned")
+
+print("\n========== DATABASE SCHEMA ==========")
+
+for column in columns:
+    print(f"{column['name']} : {column['type']}")
