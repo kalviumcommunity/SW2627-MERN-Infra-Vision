@@ -2,10 +2,6 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine, inspect
 
-# ============================
-# STEP 1: Read CSV
-# ============================
-# ============================
 # STEP 1: Read CSV
 # ============================
 
@@ -225,3 +221,26 @@ print("\n========== DATABASE SCHEMA ==========")
 
 for column in columns:
     print(f"{column['name']} : {column['type']}")
+
+# ============================
+# STEP 20: Execute SQL Files
+# ============================
+
+queries = [
+    "queries/high_marks.sql",
+    "queries/average_marks.sql",
+    "queries/students_by_branch.sql",
+    "queries/hostellers.sql"
+]
+
+for file in queries:
+    print("\n==============================")
+    print(file)
+    print("==============================")
+
+    with open(file, "r") as f:
+        query = f.read()
+
+    result = pd.read_sql(query, engine)
+
+    print(result)    
