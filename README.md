@@ -1,99 +1,218 @@
 # InfraVision
 
 ## Project Overview
-InfraVision is a data engineering project that validates, cleans, profiles, and documents cloud infrastructure billing data.
 
-## NumPy Vectorized Computation Workflow
+InfraVision is a data engineering project that validates, cleans, transforms, analyzes, and stores cloud infrastructure billing data. The project follows a complete data engineering workflow—from raw CSV files to a structured SQL database with reusable SQL queries for business analytics.
 
-This project is a good place to apply NumPy vectorization when a task needs to scale beyond Python loops. Looping over rows is easy to write, but it becomes slow on large datasets because Python has to interpret every iteration. NumPy moves the heavy computation into optimized C code, which is much faster for numeric work.
+---
 
-### Why Vectorization Matters
+# Features
 
-Python loops and per-row `.apply()` logic are fine for small data, but they do not scale well when a dataframe grows to hundreds of thousands or millions of rows. Vectorized NumPy expressions operate on entire arrays at once, which removes interpreter overhead and makes normalization, scoring, and ranking much faster.
+- Data Validation
+- Missing Value Handling
+- Data Profiling
+- Data Dictionary Generation
+- Duplicate Detection & Removal
+- String Cleaning & Text Normalization
+- Date & Time Transformation
+- Outlier Detection
+- Data Consistency Validation
+- Feature Engineering
+- Correlation Analysis
+- Threshold-Based Anomaly Detection
+- Statistical (Z-Score) Anomaly Detection
+- SQLite Database Integration
+- SQL Query Automation
+- Business Metrics using SQL
+- SQL Filtering, Grouping & Aggregation
+- SQL Joins & Multi-Table Analysis
+- Schema Validation
+- Query Reusability using SQL Files
 
-### Example: Min-Max Normalization
+---
+
+# NumPy Vectorized Computation Workflow
+
+This project uses **NumPy vectorization** to perform efficient numerical computations on large datasets. Instead of processing one row at a time using Python loops, vectorized operations process entire arrays simultaneously, resulting in much faster execution.
+
+## Min-Max Normalization
 
 ```python
 import numpy as np
 
-# Slow: loop-based approach
-normalized = []
-for value in df['revenue']:
-	normalized.append((value - df['revenue'].min()) / (df['revenue'].max() - df['revenue'].min()))
+revenue_array = df["revenue"].values
 
-# Fast: NumPy vectorized approach
-revenue_array = df['revenue'].values
-normalized = (revenue_array - revenue_array.min()) / (revenue_array.max() - revenue_array.min())
-df['revenue_normalized'] = normalized
+normalized = (
+    revenue_array - revenue_array.min()
+) / (
+    revenue_array.max() - revenue_array.min()
+)
+
+df["revenue_normalized"] = normalized
 ```
 
-### Example: Z-Score Normalization
+## Z-Score Normalization
 
 ```python
-revenue_array = df['revenue'].values
-z_scores = (revenue_array - revenue_array.mean()) / revenue_array.std()
-df['revenue_zscore'] = z_scores
+revenue_array = df["revenue"].values
+
+z_scores = (
+    revenue_array - revenue_array.mean()
+) / revenue_array.std()
+
+df["revenue_zscore"] = z_scores
 ```
 
-### Measure the Improvement
+---
 
-Time the loop version and the vectorized version to confirm the gain:
+# Technologies Used
 
-```python
-import time
+- Python
+- Pandas
+- NumPy
+- SQLite
+- SQLAlchemy
+- SQL
+- JSON
+- CSV
 
-start = time.time()
-# loop code here
-loop_time = time.time() - start
+---
 
-start = time.time()
-# NumPy code here
-vec_time = time.time() - start
-
-print(f"Loop: {loop_time:.3f}s")
-print(f"NumPy: {vec_time:.3f}s")
-print(f"Speedup: {loop_time / vec_time:.0f}x")
-```
-
-The main takeaway is simple: use Pandas for dataframe structure, but move numeric transformations into NumPy whenever performance matters.
-
-## Features
-- Data Validation
-- Missing Value Imputation
-- Data Profiling
-- Data Dictionary Generation
-- Duplicate Detection and Removal with Audit Trail
-- String Cleaning and Text Normalisation
-- Date & Time Transformation Pipeline
-- Outlier Detection with Statistical Methods
-- Data Consistency & Validation Rules
-- Multi-Source Merging & Join Validation
-- Feature Engineering & Derived Business Columns
-- Correlation & Relationship Analysis
-
-## Project Structure
+# Project Structure
 
 ```
-data/
-output/
-scripts/
-main.py
-requirements.txt
-README.md
+InfraVision/
+│
+├── data/
+│
+├── output/
+│
+├── queries/
+│   ├── high_marks.sql
+│   ├── average_marks.sql
+│   ├── students_by_branch.sql
+│   ├── hostellers.sql
+│   ├── where_query.sql
+│   ├── having_query.sql
+│   ├── where_having_query.sql
+│   ├── order_by_query.sql
+│   ├── inner_join.sql
+│   ├── left_join.sql
+│   ├── outer_join.sql
+│   └── unmatched.sql
+│
+├── analytics.db
+├── students.csv
+├── student.json
+├── branches.csv
+├── main.py
+├── requirements.txt
+└── README.md
 ```
 
-## Run the Project
+---
+
+# Database Integration
+
+The cleaned dataset is automatically stored inside a SQLite database.
+
+Database:
+
+```
+analytics.db
+```
+
+Tables:
+
+- students_cleaned
+- branches
+
+SQLAlchemy is used to:
+
+- Create the database
+- Store cleaned data
+- Execute SQL queries
+- Validate database schema
+
+---
+
+# SQL Features
+
+The project demonstrates:
+
+- SELECT
+- WHERE
+- GROUP BY
+- HAVING
+- ORDER BY
+- INNER JOIN
+- LEFT JOIN
+- OUTER JOIN
+- Aggregate Functions
+- SQL Queries stored in external `.sql` files
+
+---
+
+# Anomaly Detection
+
+The project detects anomalies using two approaches:
+
+### Threshold-Based Alerts
+
+- High Marks
+- Low Marks
+- Low Fee Payments
+
+### Statistical Detection
+
+- Z-Score Analysis
+- Automatic anomaly logging
+- Export to `anomalies.csv`
+
+---
+
+# Output Files
+
+The project generates:
+
+- report.csv
+- anomalies.csv
+- analytics.db
+
+---
+
+# Run the Project
+
+Install dependencies
 
 ```bash
-python scripts/workflow.py
-streamlit run main.py
+pip install -r requirements.txt
 ```
 
-## Output Files
+Run
 
-- output/intake_report.json
-- output/processed_cloud_data.csv
-- output/data_profile_report.txt
-- output/data_dictionary.csv
-- output/removed_duplicates_audit.csv
-- output/deduplication_summary.json
+```bash
+python main.py
+```
+
+---
+
+# Learning Outcomes
+
+This project demonstrates practical experience with:
+
+- Data Cleaning
+- Data Transformation
+- Feature Engineering
+- Data Validation
+- NumPy Vectorization
+- Pandas
+- SQLite
+- SQLAlchemy
+- SQL Queries
+- Business Metrics
+- Aggregation
+- Joins
+- Database Integration
+- Anomaly Detection
+- Data Engineering Workflow
