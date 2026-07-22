@@ -6,6 +6,8 @@ from sqlalchemy import create_engine, inspect
 # ============================
 
 df = pd.read_csv("students.csv")
+branch_df = pd.read_csv("branches.csv")
+print(branch_df)
 
 print("========== ORIGINAL DATA ==========")
 print(df)
@@ -163,6 +165,7 @@ anomalies.to_csv("anomalies.csv", index=False)
 print("\nanomalies.csv created successfully!")    
 
 # ============================
+# ============================
 # STEP 15: Create SQLite Database
 # ============================
 
@@ -183,6 +186,22 @@ df.to_sql(
 
 print("students_cleaned table created successfully!")
 
+# >>> PASTE THE NEW CODE HERE <<<
+
+branch_df.to_sql(
+    "branches",
+    con=engine,
+    if_exists="replace",
+    index=False
+)
+
+print("branches table created successfully!")
+
+from sqlalchemy import inspect
+
+inspector = inspect(engine)
+print(inspector.get_table_names())
+
 # ============================
 # STEP 17: Read Data from SQL
 # ============================
@@ -193,7 +212,6 @@ sql_df = pd.read_sql(query, engine)
 
 print("\n========== DATA FROM DATABASE ==========")
 print(sql_df)
-
 # ============================
 # STEP 18: SQL Query
 # ============================
@@ -267,3 +285,43 @@ for file in sql_files:
     result = pd.read_sql(query, engine)
 
     print(result)    
+
+# ============================
+# STEP 20: Execute JOIN Queries
+# ============================
+
+join_files = [
+    "queries/inner_join.sql",
+    "queries/left_join.sql",
+    "queries/outer_join.sql",
+    "queries/unmatched.sql"
+]
+
+for file in join_files:
+    print("\n==============================")
+    print(file)
+    print("==============================")
+
+    with open(file, "r") as f:
+        query = f.read()
+
+    result = pd.read_sql(query, engine)
+
+    print(result)    
+# ============================
+# STEP 21: Row Count Validation
+# ============================
+
+print("\n========== ROW COUNT VALIDATION ==========")
+
+print("Students Table :", len(df))
+print("Branches Table :", len(branch_df))
+
+joined = pd.read_sql("""
+SELECT *
+FROM students_cleaned s
+LEFT JOIN branches b
+ON s.Branch = b.Branch
+""", engine)
+
+print("Joined Table :", len(joined))
