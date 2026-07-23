@@ -299,3 +299,82 @@ At the top of each file, document the purpose, the business metric it defines, w
 ### Key Takeaway
 
 If a metric matters to multiple consumers, define it once in a view. If the computation is too expensive to run live, pre-aggregate it into a table. That combination keeps dashboards trustworthy and fast.
+
+## SQL-Based Insight Validation
+
+When a metric exists in both Python and SQL, the two layers must agree. If Python says 1,000 active users and SQL says 1,200, you have computation drift: one layer is wrong, or both are using different rules.
+
+### Why Validation Matters
+
+Metrics often drift because teams define the same concept in different places. A churn rate in SQL may include one set of conditions while a Python notebook uses another. Without validation, both numbers can look plausible while quietly disagreeing.
+
+### Common Drift Scenarios
+
+Typical causes of disagreement include:
+
+- Date handling differences between SQL date types and Python datetime objects
+- NULL versus NaN behavior in joins and calculations
+- Rounding differences between database logic and application logic
+- Timezone mismatches between UTC and local time
+- String case sensitivity differences across systems
+
+### A Simple Validation Workflow
+
+Validate the same metric in both layers and compare the outputs side by side:
+
+1. Compute the metric in SQL.
+2. Compute the same metric in Python.
+3. Compare the results and measure the difference.
+4. Investigate any mismatch that exceeds the allowed tolerance.
+5. Fix the incorrect layer and validate again.
+
+Example tolerance check:
+
+```python
+sql_value = 1200
+python_value = 1000
+tolerance = 0.01
+
+if abs(sql_value - python_value) > tolerance:
+	print("Validation failed: metric drift detected")
+else:
+	print("Validation passed")
+```
+
+### How To Investigate Differences
+
+When SQL and Python disagree, narrow the scope first:
+
+- Check whether the mismatch affects one row or all rows
+- Trace one specific record manually from raw data to final metric
+- Identify which layer matches the manual calculation
+- Correct the wrong rule and document why it changed
+
+If the issue is isolated, it is often a data quality problem. If the issue is systematic, it usually points to a logic mismatch.
+
+### Automating Validation
+
+Validation should run on a schedule, not only during debugging. Store validation outputs in a table or report, and alert the team when a metric crosses its threshold.
+
+Good automation practices include:
+
+- Run validation daily or after each pipeline refresh
+- Store results with timestamps so drift can be tracked over time
+- Send alerts when discrepancies exceed tolerance
+- Document expected differences so known exceptions do not become false alarms
+
+### Documentation Rules
+
+Every validated metric should have a written definition of what matches, what can differ, and why. That documentation should explain any intentional mismatch, such as SQL including refunds while Python excludes them by design.
+
+### Validation Checklist
+
+- Shared metrics are computed the same way in SQL and Python
+- Differences are measured against a clear tolerance
+- Manual tracing is used to resolve disagreements
+- Alerts exist for unexpected drift
+- Expected exceptions are documented in version control
+
+### Key Takeaway
+
+If a metric matters, validate it across layers before anyone uses it for reporting. Cross-checking SQL and Python is how you catch silent drift before it reaches dashboards and decision-makers.
