@@ -8,12 +8,7 @@ print("=" * 60)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-initial_steps = [
-    ("Step 1", "Data Validation", [sys.executable, "-m", "scripts.validate_data"]),
-    ("Step 2", "Missing Value Imputation", [sys.executable, "-m", "scripts.missing_value_imputation"]),
-    ("Step 3", "NumPy Vectorized Computation", [sys.executable, "-m", "scripts.vectorized_computation"]),
-    ("Step 4", "Data Profiling", [sys.executable, "-m", "scripts.data_profiling"]),
-    ("Step 5", "Data Dictionary", [sys.executable, "-m", "scripts.data_dictionary"]),
+ main
 ]
 
 for label, title, command in initial_steps:

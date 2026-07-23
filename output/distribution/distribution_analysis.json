@@ -1,0 +1,94 @@
+{
+  "summary": {
+    "rows": 4,
+    "numeric_columns": [
+      "BillingID",
+      "InfrastructureCost",
+      "CPUUsage",
+      "InfrastructureCost_normalized",
+      "InfrastructureCost_zscore",
+      "CPUUsage_normalized",
+      "CPUUsage_zscore"
+    ]
+  },
+  "columns": {
+    "BillingID": {
+      "count": 4,
+      "min": 101.0,
+      "max": 104.0,
+      "mean": 102.5,
+      "median": 102.5,
+      "skewness": 0.0,
+      "kurtosis": -1.1999999999999993,
+      "interpretation": "The distribution is roughly symmetric, light-tailed and relatively concentrated, and mean and median are close, so the average is reasonably representative."
+    },
+    "InfrastructureCost": {
+      "count": 4,
+      "min": 900.0,
+      "max": 1800.0,
+      "mean": 1275.0,
+      "median": 1200.0,
+      "skewness": 1.1293381149712478,
+      "kurtosis": 2.2271468144044313,
+      "interpretation": "The distribution is highly skewed, close to normal tail weight, and mean and median are close, so the average is reasonably representative."
+    },
+    "CPUUsage": {
+      "count": 4,
+      "min": 60.0,
+      "max": 82.0,
+      "mean": 73.0,
+      "median": 75.0,
+      "skewness": -1.2137456332666092,
+      "kurtosis": 2.3436992969172525,
+      "interpretation": "The distribution is highly skewed, close to normal tail weight, and mean and median are close, so the average is reasonably representative."
+    },
+    "InfrastructureCost_normalized": {
+      "count": 4,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.41666666666666663,
+      "median": 0.3333333333333333,
+      "skewness": 1.1293381149712485,
+      "kurtosis": 2.227146814404435,
+      "interpretation": "The distribution is highly skewed, close to normal tail weight, and mean and median are close, so the average is reasonably representative."
+    },
+    "InfrastructureCost_zscore": {
+      "count": 4,
+      "min": -1.1470786693528088,
+      "max": 1.6059101370939324,
+      "mean": 8.326672684688674e-17,
+      "median": -0.2294157338705617,
+      "skewness": 1.129338114971248,
+      "kurtosis": 2.227146814404433,
+      "interpretation": "The distribution is highly skewed, close to normal tail weight, and mean and median differ enough that the median is more representative."
+    },
+    "CPUUsage_normalized": {
+      "count": 4,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.5909090909090908,
+      "median": 0.6818181818181818,
+      "skewness": -1.2137456332666083,
+      "kurtosis": 2.3436992969172543,
+      "interpretation": "The distribution is highly skewed, close to normal tail weight, and mean and median are close, so the average is reasonably representative."
+    },
+    "CPUUsage_zscore": {
+      "count": 4,
+      "min": -1.618689296548195,
+      "max": 1.1206310514564426,
+      "mean": -4.163336342344337e-17,
+      "median": 0.2490291225458761,
+      "skewness": -1.2137456332666092,
+      "kurtosis": 2.3436992969172525,
+      "interpretation": "The distribution is highly skewed, close to normal tail weight, and mean and median differ enough that the median is more representative."
+    }
+  },
+  "segment_comparison": {
+    "column": "BillingID",
+    "low_segment_count": 1,
+    "high_segment_count": 1,
+    "low_cutoff": 101.75,
+    "high_cutoff": 103.25,
+    "plot_file": "billingid_segment_comparison.png"
+  }
+}
