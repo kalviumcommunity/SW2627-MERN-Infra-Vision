@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-07-20T13:31:55.574527",
+  "numeric_columns": [
+    "customer_id",
+    "order_value",
+    "transactions_per_month",
+    "avg_spend_per_transaction"
+  ],
+  "strong_pairs": [
+    {
+      "column_1": "customer_id",
+      "column_2": "order_value",
+      "pearson": 1.0
+    }
+  ],
+  "pearson_summary": {
+    "shape": [
+      4,
+      4
+    ],
+    "columns": [
+      "customer_id",
+      "order_value",
+      "transactions_per_month",
+      "avg_spend_per_transaction"
+    ]
+  },
+  "spearman_summary": {
+    "shape": [
+      4,
+      4
+    ],
+    "columns": [
+      "customer_id",
+      "order_value",
+      "transactions_per_month",
+      "avg_spend_per_transaction"
+    ]
+  },
+  "interpretation": "Strong correlations indicate that variables move together; they do not prove causation."
+}

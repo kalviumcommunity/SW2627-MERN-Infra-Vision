@@ -1,0 +1,4 @@
+from,to,lost,drop_rate_pct,potential_recovery,priority_score
+Sign Up,Email Verified,0,0.0,0,0.0
+Email Verified,Payment Added,0,0.0,0,0.0
+Payment Added,First Purchase,0,0.0,0,0.0

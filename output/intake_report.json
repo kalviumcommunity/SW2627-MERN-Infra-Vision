@@ -1,5 +1,5 @@
 {
-
+    "timestamp": "2026-07-20T13:31:36.272093",
     "checks": {
         "File Exists": "File exists",
         "File Format": "CSV format verified",
