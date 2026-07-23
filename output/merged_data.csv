@@ -1,0 +1,4 @@
+customer_id,customer_name,order_value,_merge
+101,Alice,100.0,both
+102,Bob,,left_only
+103,Charlie,200.0,both

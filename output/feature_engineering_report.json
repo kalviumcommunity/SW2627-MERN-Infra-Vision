@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-07-20T13:31:53.900912",
+  "features_created": [
+    "transactions_per_month",
+    "avg_spend_per_transaction",
+    "engagement_tier"
+  ]
+}
