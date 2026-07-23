@@ -1,79 +1,327 @@
 import pandas as pd
+import numpy as np
+from sqlalchemy import create_engine, inspect
 
-# -----------------------------
 # STEP 1: Read CSV
-# -----------------------------
-df = pd.read_csv("students.csv")
+# ============================
 
-print("Original Data")
+df = pd.read_csv("students.csv")
+branch_df = pd.read_csv("branches.csv")
+print(branch_df)
+
+print("========== ORIGINAL DATA ==========")
 print(df)
 
-# -----------------------------
-# STEP 2: Show Shape
-# -----------------------------
-print("\nShape:")
+# ============================
+# STEP 2: Shape
+# ============================
+
+print("\n========== SHAPE ==========")
 print(df.shape)
 
-# -----------------------------
-# STEP 3: Show Data Types
-# -----------------------------
-print("\nData Types:")
+# ============================
+# STEP 3: Data Types Before Conversion
+# ============================
+
+print("\n========== DATA TYPES (BEFORE) ==========")
 print(df.dtypes)
 
-# -----------------------------
+# ============================
 # STEP 4: First 3 Rows
-# -----------------------------
-print("\nFirst 3 Rows")
+# ============================
+
+print("\n========== FIRST 3 ROWS ==========")
 print(df.head(3))
 
-# -----------------------------
+# ============================
 # STEP 5: Filter Students
-# -----------------------------
-high_marks = df[df["Marks"] > 85]
+# ============================
 
-print("\nStudents with Marks > 85")
+print("\n========== STUDENTS WITH MARKS > 85 ==========")
+high_marks = df[df["Marks"] > 85]
 print(high_marks)
 
-# -----------------------------
+# ============================
 # STEP 6: Average Marks
-# -----------------------------
-average = df["Marks"].mean()
+# ============================
 
-print("\nAverage Marks")
-print(average)
+print("\n========== AVERAGE MARKS ==========")
+print(df["Marks"].mean())
 
-# -----------------------------
-# STEP 7: Group By Branch
-# -----------------------------
-branch_average = df.groupby("Branch")["Marks"].mean()
+# ============================
+# STEP 7: Average Marks by Branch
+# ============================
 
-print("\nAverage Marks by Branch")
-print(branch_average)
+print("\n========== AVERAGE MARKS BY BRANCH ==========")
+print(df.groupby("Branch")["Marks"].mean())
 
-# -----------------------------
-# STEP 8: Save High Marks Report
-# -----------------------------
-high_marks.to_csv("report.csv", index=False)
+# ============================
+# STEP 8: Save Report
+# ============================
 
+df.to_csv("report.csv", index=False)
 print("\nreport.csv created successfully!")
 
-# -----------------------------
+# ============================
 # STEP 9: Read JSON
-# -----------------------------
-json_df = pd.read_json("students.json")
+# ============================
 
-print("\nJSON Data")
+print("\n========== JSON DATA ==========")
+
+json_df = pd.read_json("student.json")
 print(json_df)
 
-# -----------------------------
-# STEP 10: Ingestion Report
-# -----------------------------
-print("\n========== INGESTION REPORT ==========")
-print("Rows:", df.shape[0])
-print("Columns:", df.shape[1])
+# ====================================================
+# STEP 10: TYPE ENFORCEMENT
+# ====================================================
 
-print("\nColumn Types")
+print("\n========== BEFORE TYPE CONVERSION ==========")
 print(df.dtypes)
 
-print("\nFirst 3 Rows")
-print(df.head(3))
+# Convert Joining_Date to datetime
+df["Joining_Date"] = pd.to_datetime(
+    df["Joining_Date"],
+    format="%Y-%m-%d"
+)
+
+# Convert Fees_Paid to float
+df["Fees_Paid"] = (
+    df["Fees_Paid"]
+    .str.replace("₹", "", regex=False)
+    .str.replace(",", "", regex=False)
+    .astype(float)
+)
+
+# Convert Hosteller to Boolean
+df["Hosteller"] = df["Hosteller"].astype(bool)
+
+print("\n========== AFTER TYPE CONVERSION ==========")
+print(df.dtypes)
+
+print("\n========== UPDATED DATA ==========")
+print(df)
+
+# ============================
+# STEP 11: Save Updated Report
+# ============================
+
+df.to_csv("report.csv", index=False)
+
+print("\nUpdated report.csv created successfully!")
+
+# ============================
+# STEP 12: Threshold Alerts
+# ============================
+
+print("\n========== THRESHOLD ALERTS ==========")
+
+alerts = []
+
+# Marks Threshold
+for index, row in df.iterrows():
+    if row["Marks"] < 35:
+        alerts.append(f"{row['Name']} has very low marks: {row['Marks']}")
+    elif row["Marks"] > 90:
+        alerts.append(f"{row['Name']} has exceptionally high marks: {row['Marks']}")
+
+# Fees Threshold
+for index, row in df.iterrows():
+    if row["Fees_Paid"] < 35000:
+        alerts.append(f"{row['Name']} has unusually low fees paid: {row['Fees_Paid']}")
+
+if alerts:
+    for alert in alerts:
+        print(alert)
+else:
+    print("No threshold alerts.")
+
+
+# ============================
+# STEP 13: Z-Score Anomaly Detection
+# ============================
+
+import numpy as np
+
+print("\n========== ANOMALY DETECTION ==========")
+
+mean = df["Marks"].mean()
+std = df["Marks"].std()
+
+df["Z_Score"] = (df["Marks"] - mean) / std
+
+anomalies = df[np.abs(df["Z_Score"]) > 1]
+
+if anomalies.empty:
+    print("No anomalies detected.")
+else:
+    print(anomalies[["Name", "Marks", "Z_Score"]])
+
+# ============================
+# STEP 14: Save Anomalies
+# ============================
+
+anomalies.to_csv("anomalies.csv", index=False)
+
+print("\nanomalies.csv created successfully!")    
+
+# ============================
+# ============================
+# STEP 15: Create SQLite Database
+# ============================
+
+engine = create_engine("sqlite:///analytics.db")
+
+print("\nDatabase created successfully!")
+
+# ============================
+# STEP 16: Store Data in Database
+# ============================
+
+df.to_sql(
+    "students_cleaned",
+    con=engine,
+    if_exists="replace",
+    index=False
+)
+
+print("students_cleaned table created successfully!")
+
+# >>> PASTE THE NEW CODE HERE <<<
+
+branch_df.to_sql(
+    "branches",
+    con=engine,
+    if_exists="replace",
+    index=False
+)
+
+print("branches table created successfully!")
+
+from sqlalchemy import inspect
+
+inspector = inspect(engine)
+print(inspector.get_table_names())
+
+# ============================
+# STEP 17: Read Data from SQL
+# ============================
+
+query = "SELECT * FROM students_cleaned"
+
+sql_df = pd.read_sql(query, engine)
+
+print("\n========== DATA FROM DATABASE ==========")
+print(sql_df)
+# ============================
+# STEP 18: SQL Query
+# ============================
+
+query = """
+SELECT *
+FROM students_cleaned
+WHERE Marks > 85
+"""
+
+high_marks = pd.read_sql(query, engine)
+
+print("\n========== STUDENTS WITH MARKS > 85 ==========")
+print(high_marks)
+
+# ============================
+# STEP 19: Validate Schema
+# ============================
+
+inspector = inspect(engine)
+
+columns = inspector.get_columns("students_cleaned")
+
+print("\n========== DATABASE SCHEMA ==========")
+
+for column in columns:
+    print(f"{column['name']} : {column['type']}")
+
+# ============================
+# STEP 20: Execute SQL Files
+# ============================
+
+queries = [
+    "queries/high_marks.sql",
+    "queries/average_marks.sql",
+    "queries/students_by_branch.sql",
+    "queries/hostellers.sql"
+]
+
+for file in queries:
+    print("\n==============================")
+    print(file)
+    print("==============================")
+
+    with open(file, "r") as f:
+        query = f.read()
+
+    result = pd.read_sql(query, engine)
+
+    print(result)    
+
+# ============================
+# STEP 21: SQL Filtering & Aggregation
+# ============================
+
+sql_files = [
+    "queries/where_query.sql",
+    "queries/having_query.sql",
+    "queries/where_having_query.sql",
+    "queries/order_by_query.sql"
+]
+
+for file in sql_files:
+    print("\n==============================")
+    print(file)
+    print("==============================")
+
+    with open(file, "r") as f:
+        query = f.read()
+
+    result = pd.read_sql(query, engine)
+
+    print(result)    
+
+# ============================
+# STEP 20: Execute JOIN Queries
+# ============================
+
+join_files = [
+    "queries/inner_join.sql",
+    "queries/left_join.sql",
+    "queries/outer_join.sql",
+    "queries/unmatched.sql"
+]
+
+for file in join_files:
+    print("\n==============================")
+    print(file)
+    print("==============================")
+
+    with open(file, "r") as f:
+        query = f.read()
+
+    result = pd.read_sql(query, engine)
+
+    print(result)    
+# ============================
+# STEP 21: Row Count Validation
+# ============================
+
+print("\n========== ROW COUNT VALIDATION ==========")
+
+print("Students Table :", len(df))
+print("Branches Table :", len(branch_df))
+
+joined = pd.read_sql("""
+SELECT *
+FROM students_cleaned s
+LEFT JOIN branches b
+ON s.Branch = b.Branch
+""", engine)
+
+print("Joined Table :", len(joined))

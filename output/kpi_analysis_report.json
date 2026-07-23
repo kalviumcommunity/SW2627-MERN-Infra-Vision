@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-07-20T13:32:03.862792",
+  "kpis": [
+    {
+      "kpi_name": "Active Customers",
+      "formula": "Distinct customer_id with transaction_date in the last 30 days",
+      "value": 0,
+      "target_min": 5,
+      "target_max": 10,
+      "status": "out_of_range"
+    },
+    {
+      "kpi_name": "Revenue per Customer",
+      "formula": "Total amount / distinct customer_id",
+      "value": 0.0,
+      "target_min": 100,
+      "target_max": 500,
+      "status": "out_of_range"
+    },
+    {
+      "kpi_name": "Churn Rate",
+      "formula": "Mean churn column",
+      "value": 0.0,
+      "target_min": 0.0,
+      "target_max": 0.05,
+      "status": "pass"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 2
+  }
+}
