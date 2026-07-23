@@ -1,0 +1,4 @@
+kpi_name,formula,value,target_min,target_max,status
+Active Customers,Distinct customer_id with transaction_date in the last 30 days,0.0,5.0,10.0,out_of_range
+Revenue per Customer,Total amount / distinct customer_id,0.0,100.0,500.0,out_of_range
+Churn Rate,Mean churn column,0.0,0.0,0.05,pass
