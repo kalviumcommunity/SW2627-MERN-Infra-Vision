@@ -1,79 +1,96 @@
+from pathlib import Path
+
 import pandas as pd
+import plotly.express as px
+import streamlit as st
 
-# -----------------------------
-# STEP 1: Read CSV
-# -----------------------------
-df = pd.read_csv("students.csv")
 
-print("Original Data")
-print(df)
+BASE_DIR = Path(__file__).resolve().parent
+PROCESSED_DATA_FILE = BASE_DIR / "output" / "processed_cloud_data.csv"
+RAW_DATA_FILE = BASE_DIR / "data" / "raw" / "cloud_data.csv"
 
-# -----------------------------
-# STEP 2: Show Shape
-# -----------------------------
-print("\nShape:")
-print(df.shape)
 
-# -----------------------------
-# STEP 3: Show Data Types
-# -----------------------------
-print("\nData Types:")
-print(df.dtypes)
+@st.cache_data(show_spinner=False)
+def load_data():
+	data_file = PROCESSED_DATA_FILE if PROCESSED_DATA_FILE.exists() else RAW_DATA_FILE
+	if not data_file.exists():
+		raise FileNotFoundError(f"No dataset found at {PROCESSED_DATA_FILE} or {RAW_DATA_FILE}")
+	return pd.read_csv(data_file), data_file
 
-# -----------------------------
-# STEP 4: First 3 Rows
-# -----------------------------
-print("\nFirst 3 Rows")
-print(df.head(3))
 
-# -----------------------------
-# STEP 5: Filter Students
-# -----------------------------
-high_marks = df[df["Marks"] > 85]
+def main():
+	st.set_page_config(page_title="InfraVision Dashboard", layout="wide")
+	st.title("InfraVision Interactive Dashboard")
+	st.caption("Interactive Plotly charts for cloud infrastructure billing data.")
 
-print("\nStudents with Marks > 85")
-print(high_marks)
+	df, data_file = load_data()
 
-# -----------------------------
-# STEP 6: Average Marks
-# -----------------------------
-average = df["Marks"].mean()
+	st.sidebar.header("Filters")
+	services = sorted(df["CloudService"].dropna().unique()) if "CloudService" in df.columns else []
+	selected_services = st.sidebar.multiselect("Cloud service", services, default=services)
 
-print("\nAverage Marks")
-print(average)
+	projects = sorted(df["ProjectID"].dropna().unique()) if "ProjectID" in df.columns else []
+	selected_projects = st.sidebar.multiselect("Project", projects, default=projects)
 
-# -----------------------------
-# STEP 7: Group By Branch
-# -----------------------------
-branch_average = df.groupby("Branch")["Marks"].mean()
+	filtered = df.copy()
+	if selected_services and "CloudService" in filtered.columns:
+		filtered = filtered[filtered["CloudService"].isin(selected_services)]
+	if selected_projects and "ProjectID" in filtered.columns:
+		filtered = filtered[filtered["ProjectID"].isin(selected_projects)]
 
-print("\nAverage Marks by Branch")
-print(branch_average)
+	metric_columns = [column for column in ["InfrastructureCost", "CPUUsage"] if column in filtered.columns]
+	metric = st.sidebar.selectbox("Metric", metric_columns) if metric_columns else None
+	group_options = [column for column in ["ProjectID", "CloudService", "BillingID"] if column in filtered.columns]
+	group_by = st.sidebar.selectbox("Group by", group_options) if group_options else None
 
-# -----------------------------
-# STEP 8: Save High Marks Report
-# -----------------------------
-high_marks.to_csv("report.csv", index=False)
+	col1, col2, col3 = st.columns(3)
+	col1.metric("Rows", f"{len(filtered):,}")
+	col2.metric("Projects", f"{filtered['ProjectID'].nunique():,}" if "ProjectID" in filtered.columns else "N/A")
+	col3.metric("Data source", data_file.name)
 
-print("\nreport.csv created successfully!")
+	if filtered.empty or metric is None or group_by is None:
+		st.warning("No rows match the selected filters or required columns are missing.")
+		return
 
-# -----------------------------
-# STEP 9: Read JSON
-# -----------------------------
-json_df = pd.read_json("students.json")
+	agg = filtered.groupby(group_by, dropna=False)[metric].mean().reset_index()
+	bar_chart = px.bar(
+		agg,
+		x=group_by,
+		y=metric,
+		color=group_by,
+		title=f"Average {metric} by {group_by}",
+	)
+	bar_chart.update_traces(hovertemplate=f"{group_by}: %{{x}}<br>{metric}: %{{y:,.2f}}<extra></extra>")
+	bar_chart.update_layout(showlegend=False, height=520)
+	st.plotly_chart(bar_chart, use_container_width=True)
 
-print("\nJSON Data")
-print(json_df)
+	left, right = st.columns(2)
 
-# -----------------------------
-# STEP 10: Ingestion Report
-# -----------------------------
-print("\n========== INGESTION REPORT ==========")
-print("Rows:", df.shape[0])
-print("Columns:", df.shape[1])
+	with left:
+		scatter_x = "CPUUsage" if "CPUUsage" in filtered.columns else filtered.columns[0]
+		scatter_y = "InfrastructureCost" if "InfrastructureCost" in filtered.columns else filtered.columns[0]
+		scatter = px.scatter(
+			filtered,
+			x=scatter_x,
+			y=scatter_y,
+			color="CloudService" if "CloudService" in filtered.columns else None,
+			hover_data=[column for column in ["BillingID", "ProjectID"] if column in filtered.columns],
+			title="Infrastructure Cost vs CPU Usage",
+		)
+		scatter.update_traces(marker=dict(size=12, opacity=0.8))
+		st.plotly_chart(scatter, use_container_width=True)
 
-print("\nColumn Types")
-print(df.dtypes)
+	with right:
+		st.subheader("Filtered data preview")
+		st.dataframe(filtered.head(10), use_container_width=True)
 
-print("\nFirst 3 Rows")
-print(df.head(3))
+	st.download_button(
+		label="Download filtered data as CSV",
+		data=filtered.to_csv(index=False).encode("utf-8"),
+		file_name="infra_vision_filtered_data.csv",
+		mime="text/csv",
+	)
+
+
+if __name__ == "__main__":
+	main()

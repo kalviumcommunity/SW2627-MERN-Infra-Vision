@@ -484,3 +484,138 @@ Reference lines add context. A target line transforms a chart from "here is what
 - [Data-to-Viz](https://www.data-to-viz.com/)
 - [Colour Blindness Simulator](https://www.color-blindness.com/coblis-color-blindness-simulator/)
 - [Edward Tufte's Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi)
+
+## Interactive Plotly Chart Design
+
+Interactive charts let stakeholders explore findings themselves instead of waiting for a new export every time a question comes up. Plotly is a strong fit when you want hover tooltips, dropdown filters, zoom, pan, and date range selection to be part of the default experience.
+
+### The Real Scenario
+
+An analyst builds a revenue chart in matplotlib. A stakeholder notices a spike in March and asks for the exact value, then asks to filter by Q1, then asks to compare it to last year. Each answer requires a new chart or a manual lookup. The analyst ends up acting like a chart-generation service instead of an analyst.
+
+The fix is to build the chart in Plotly. Hover reveals the exact value, zoom and pan let the user inspect the shape of the trend, and dropdown filters let them switch views instantly. The chart answers the first question and the follow-up questions without rebuilding anything.
+
+### Hover Tooltips: Detail on Demand
+
+Hover tooltips show detailed values when the user points at a data mark. That keeps the chart clean while still exposing exact values, dates, and supporting metrics on demand.
+
+```python
+import plotly.graph_objects as go
+
+fig = go.Figure(data=go.Scatter(
+	x=df['date'],
+	y=df['revenue'],
+	mode='lines+markers',
+	hovertemplate=(
+		'<b>%{x|%Y-%m-%d}</b><br>'
+		'Revenue: $%{y:,.0f}<br>'
+		'<extra></extra>'
+	),
+	line=dict(color='#1f77b4', width=2),
+	marker=dict(size=8)
+))
+
+fig.update_layout(
+	title='Daily Revenue Trend',
+	xaxis_title='Date',
+	yaxis_title='Revenue ($)',
+	hovermode='x unified',
+	height=500
+)
+```
+
+The `hovertemplate` controls exactly what appears. `%{x|%Y-%m-%d}` formats the date, `%{y:,.0f}` formats the number, and `<extra></extra>` removes the default trace-name box.
+
+### Dropdown Filters: Multiple Views, One Chart
+
+A dropdown can switch between revenue, profit, and order count without reloading data. All traces are loaded once, and the menu only changes which trace is visible.
+
+```python
+fig = go.Figure()
+
+fig.add_trace(go.Bar(x=products, y=revenue, name='Revenue',
+					 marker=dict(color='#1f77b4'), visible=True))
+fig.add_trace(go.Bar(x=products, y=profit, name='Profit',
+					 marker=dict(color='#ff7f0e'), visible=False))
+fig.add_trace(go.Bar(x=products, y=orders, name='Orders',
+					 marker=dict(color='#2ca02c'), visible=False))
+
+fig.update_layout(
+	updatemenus=[dict(
+		active=0,
+		buttons=[
+			dict(label='Revenue', method='update',
+				 args=[{'visible': [True, False, False]},
+					   {'title': 'Revenue by Product'}]),
+			dict(label='Profit', method='update',
+				 args=[{'visible': [False, True, False]},
+					   {'title': 'Profit by Product'}]),
+			dict(label='Orders', method='update',
+				 args=[{'visible': [False, False, True]},
+					   {'title': 'Orders by Product'}])
+		]
+	)]
+)
+```
+
+Each button updates the visible traces and the chart title. Because the data is already in the browser, the switch is instant.
+
+### Zoom, Pan, and Date Range Selection
+
+Plotly charts include zoom and pan by default. Users can drag to zoom into a region, double-click to reset the view, and use the built-in date controls for common time windows.
+
+```python
+fig.update_xaxes(
+	rangeselector=dict(
+		buttons=list([
+			dict(count=1, label='1M', step='month', stepmode='backward'),
+			dict(count=3, label='3M', step='month', stepmode='backward'),
+			dict(count=6, label='6M', step='month', stepmode='backward'),
+			dict(count=1, label='YTD', step='year', stepmode='todate'),
+			dict(step='all', label='All')
+		])
+	),
+	rangeslider=dict(visible=True)
+)
+```
+
+The range selector makes it easy to jump to common periods such as last month, last quarter, or year-to-date. The range slider gives the user a quick way to choose any custom window.
+
+### Integrating Plotly With Streamlit
+
+Plotly charts embed cleanly in Streamlit with `st.plotly_chart`, preserving hover, zoom, and pan interactions. That makes it easy to build a dashboard with sidebar filters and interactive charts in one application.
+
+```python
+import streamlit as st
+import plotly.graph_objects as go
+
+st.set_page_config(layout='wide')
+st.title('Sales Analytics Dashboard')
+
+fig = go.Figure(data=go.Scatter(
+	x=df['date'],
+	y=df['revenue'],
+	mode='lines+markers',
+	hovertemplate='<b>%{x}</b><br>Revenue: $%{y:,.0f}<extra></extra>'
+))
+fig.update_layout(title='Revenue Trend', height=500)
+
+st.plotly_chart(fig, use_container_width=True)
+
+min_date = st.sidebar.date_input('Start Date')
+max_date = st.sidebar.date_input('End Date')
+```
+
+Plotly charts can also be exported as standalone HTML with `fig.write_html('chart.html')`, which is useful when you want to share an interactive chart without needing Python or a live app.
+
+### Key Takeaway
+
+Use Plotly when the chart needs to answer follow-up questions without regeneration. Hover tooltips, dropdown filters, and built-in navigation controls make the chart interactive enough for exploration while still staying simple to share.
+
+### Bonus Resources
+
+- [Plotly Python Documentation](https://plotly.com/python/)
+- [Plotly Hover Text and Formatting](https://plotly.com/python/hover-text-and-formatting/)
+- [Streamlit Plotly Integration](https://docs.streamlit.io/library/api-reference/charts/st.plotly_chart)
+- [Plotly Buttons and Dropdowns](https://plotly.com/python/dropdowns/)
+- [Dash by Plotly](https://dash.plotly.com/)
