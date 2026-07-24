@@ -1,0 +1,4 @@
+customer_id,customer_name,order_value,_merge,transactions_per_month,avg_spend_per_transaction,engagement_tier
+101,Alice,100.0,both,0.0,0.0,low
+102,Bob,,left_only,0.0,0.0,low
+103,Charlie,200.0,both,0.0,0.0,low

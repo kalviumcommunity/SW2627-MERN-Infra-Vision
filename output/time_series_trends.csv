@@ -1,0 +1,4 @@
+customer_id,customer_name,order_value,_merge,transactions_per_month,avg_spend_per_transaction,engagement_tier,CloudService,ProjectID,InfrastructureCost,CPUUsage,BillingID,avg_cpu_by_service,avg_cost_by_service,date,revenue,revenue_ma7,revenue_ma30,cumulative_revenue,daily_change_pct
+101,Alice,100.0,both,0.0,0.0,low,Unknown,P001,0.0,0.0,1,0.0,0.0,2024-01-01,0.0,0.0,0.0,0.0,
+102,Bob,,left_only,0.0,0.0,low,Unknown,P002,0.0,0.0,2,0.0,0.0,2024-01-02,0.0,0.0,0.0,0.0,
+103,Charlie,200.0,both,0.0,0.0,low,Unknown,P003,0.0,0.0,3,0.0,0.0,2024-01-03,0.0,0.0,0.0,0.0,
