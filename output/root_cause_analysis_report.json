@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-07-20T13:32:05.543981",
+  "findings": {
+    "anomaly_date": "2024-01-01",
+    "hourly_success": {
+      "0": 1.0,
+      "1": 1.0,
+      "2": 1.0
+    },
+    "success_by_payment": {},
+    "hypothesis": "Payment processor outage affecting credit card transactions during the anomaly window.",
+    "recommendation": "Add redundant payment processor and automatic failover for affected payment methods."
+  }
+}

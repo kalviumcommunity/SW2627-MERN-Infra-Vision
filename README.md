@@ -1,186 +1,119 @@
 # InfraVision
 
 ## Project Overview
-InfraVision is a data engineering project that validates, cleans, profiles, and documents cloud infrastructure billing data.
 
-## NumPy Vectorized Computation Workflow
+InfraVision is a data engineering project that validates, cleans, transforms, analyzes, and stores cloud infrastructure billing data. The project follows a complete data engineering workflow—from raw CSV files to a structured SQL database with reusable SQL queries for business analytics.
 
-This project is a good place to apply NumPy vectorization when a task needs to scale beyond Python loops. Looping over rows is easy to write, but it becomes slow on large datasets because Python has to interpret every iteration. NumPy moves the heavy computation into optimized C code, which is much faster for numeric work.
+---
 
-### Why Vectorization Matters
+# Features
 
-Python loops and per-row `.apply()` logic are fine for small data, but they do not scale well when a dataframe grows to hundreds of thousands or millions of rows. Vectorized NumPy expressions operate on entire arrays at once, which removes interpreter overhead and makes normalization, scoring, and ranking much faster.
+- Data Validation
+- Missing Value Handling
+- Data Profiling
+- Data Dictionary Generation
+- Duplicate Detection & Removal
+- String Cleaning & Text Normalization
+- Date & Time Transformation
+- Outlier Detection
+- Data Consistency Validation
+- Feature Engineering
+- Correlation Analysis
+- Threshold-Based Anomaly Detection
+- Statistical (Z-Score) Anomaly Detection
+- SQLite Database Integration
+- SQL Query Automation
+- Business Metrics using SQL
+- SQL Filtering, Grouping & Aggregation
+- SQL Joins & Multi-Table Analysis
+- Schema Validation
+- Query Reusability using SQL Files
 
-### Example: Min-Max Normalization
+---
+
+# NumPy Vectorized Computation Workflow
+
+This project uses **NumPy vectorization** to perform efficient numerical computations on large datasets. Instead of processing one row at a time using Python loops, vectorized operations process entire arrays simultaneously, resulting in much faster execution.
+
+## Min-Max Normalization
 
 ```python
 import numpy as np
 
-# Slow: loop-based approach
-normalized = []
-for value in df['revenue']:
-	normalized.append((value - df['revenue'].min()) / (df['revenue'].max() - df['revenue'].min()))
+revenue_array = df["revenue"].values
 
-# Fast: NumPy vectorized approach
-revenue_array = df['revenue'].values
-normalized = (revenue_array - revenue_array.min()) / (revenue_array.max() - revenue_array.min())
-df['revenue_normalized'] = normalized
-```
-
-### Example: Z-Score Normalization
-
-```python
-revenue_array = df['revenue'].values
-z_scores = (revenue_array - revenue_array.mean()) / revenue_array.std()
-df['revenue_zscore'] = z_scores
-```
-
-### Measure the Improvement
-
-Time the loop version and the vectorized version to confirm the gain:
-
-```python
-import time
-
-start = time.time()
-# loop code here
-loop_time = time.time() - start
-
-start = time.time()
-# NumPy code here
-vec_time = time.time() - start
-
-print(f"Loop: {loop_time:.3f}s")
-print(f"NumPy: {vec_time:.3f}s")
-print(f"Speedup: {loop_time / vec_time:.0f}x")
-```
-
-The main takeaway is simple: use Pandas for dataframe structure, but move numeric transformations into NumPy whenever performance matters.
-
-## Distribution Analysis for Business Trends
-
-After optimization, the next step is understanding whether a numeric column is symmetric, skewed, heavy-tailed, or multi-segment. This project now includes a distribution-analysis script that computes skewness and kurtosis, saves histogram plus KDE plots, and compares low-value and high-value segments for numeric columns in the processed dataset.
-
-### What It Produces
-
-- Skewness and kurtosis for every numeric column
-- Histogram and KDE plots saved under `output/distribution/`
-- A segment comparison chart for the first numeric column
-- A JSON summary with business-facing interpretation notes
-
-### Why It Matters
-
-If a revenue-like column is heavily right-skewed, the mean can be misleading and the median becomes a better business summary. If the distribution looks bimodal or the low/high segments differ sharply, that usually points to different customer groups or product tiers that should be analyzed separately.
-
-## Features
-- Data Validation
-- Missing Value Imputation
-- Data Profiling
-- Distribution Analysis
-- Data Dictionary Generation
-
-## Project Structure
-
-```
-data/
-output/
-scripts/
-main.py
-requirements.txt
-README.md
-```
-
-## Run the Project
-
-```bash
-python scripts/workflow.py
-streamlit run main.py
-```
-
-## Output Files
-
-- output/intake_report.json
-- output/processed_cloud_data.csv
-- output/data_profile_report.txt
-- output/distribution/distribution_analysis.json
-- output/distribution/*.png
-- output/data_dictionary.csv
-
-## Analytical SQL Query Optimisation
-
-Analytical queries often become slow because they pull too much data, join too early, and hide intent behind `SELECT *`. The patterns below keep dashboards fast as data grows from thousands to millions of rows.
-
-### Why `SELECT *` Is a Performance Antipattern
-
-`SELECT *` fetches every column from every row, even when you only need a few fields. That increases I/O, network traffic, and memory usage. It can also expose columns that should not be part of the query result.
-
-Use explicit columns instead:
-
-```sql
-SELECT
-	t.transaction_id,
-	t.customer_id,
-	t.amount,
-	c.customer_name,
-	c.country
-FROM transactions t
-JOIN customers c ON t.customer_id = c.id
-WHERE t.year = 2024;
-```
-
-### Filter Early Before Joining
-
-When possible, reduce the dataset before performing joins. This keeps intermediate results smaller and makes the query cheaper to execute.
-
-```sql
-SELECT t.transaction_id, t.amount, c.customer_name
-FROM (
-	SELECT transaction_id, customer_id, amount
-	FROM transactions
-	WHERE transaction_year = 2024
-) t
-JOIN customers c ON t.customer_id = c.id;
-```
-
-### Use CTEs for Readability
-
-Common Table Expressions (CTEs) break complex logic into named steps. That makes queries easier to read, test, and maintain.
-
-```sql
-WITH recent_transactions AS (
-	SELECT customer_id, amount, transaction_date
-	FROM transactions
-	WHERE transaction_date >= CURRENT_DATE - INTERVAL 90 DAY
-),
-customer_summary AS (
-	SELECT customer_id, COUNT(*) AS transaction_count, SUM(amount) AS total_spent
-	FROM recent_transactions
-	GROUP BY customer_id
+normalized = (
+    revenue_array - revenue_array.min()
+) / (
+    revenue_array.max() - revenue_array.min()
 )
-SELECT cs.customer_id, cs.transaction_count, cs.total_spent
-FROM customer_summary cs
-WHERE cs.total_spent > 10000;
+
+df["revenue_normalized"] = normalized
 ```
 
-### Measure What Changed
+## Z-Score Normalization
 
-Optimization should be validated, not assumed. Use `EXPLAIN` or `EXPLAIN ANALYZE` to inspect execution plans and compare query runtime before and after changes.
+```python
+revenue_array = df["revenue"].values
 
-### Checklist
+z_scores = (
+    revenue_array - revenue_array.mean()
+) / revenue_array.std()
 
-- No `SELECT *` in production queries
-- Filters applied before joins whenever possible
-- Complex logic split into named CTEs
-- Column names match aliases clearly
-- Query tested against production-scale data
-- High-cardinality filter columns indexed when appropriate
+df["revenue_zscore"] = z_scores
+```
 
-### Real-World Impact
+---
 
-A revenue dashboard query can often be reduced from tens of seconds to a few seconds by combining explicit columns, early filtering, and CTEs. The benefit compounds because each optimization reduces the amount of work the database has to do.
+# Technologies Used
 
-### Bonus Resources
+- Python
+- Pandas
+- NumPy
+- SQLite
+- SQLAlchemy
+- SQL
+- JSON
+- CSV
 
+---
+
+# Project Structure
+
+```
+InfraVision/
+│
+├── data/
+│
+├── output/
+│
+├── queries/
+│   ├── high_marks.sql
+│   ├── average_marks.sql
+│   ├── students_by_branch.sql
+│   ├── hostellers.sql
+│   ├── where_query.sql
+│   ├── having_query.sql
+│   ├── where_having_query.sql
+│   ├── order_by_query.sql
+│   ├── inner_join.sql
+│   ├── left_join.sql
+│   ├── outer_join.sql
+│   └── unmatched.sql
+│
+├── analytics.db
+├── students.csv
+├── student.json
+├── branches.csv
+├── main.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+
+ SQL_Views_Aggregation_LayerDesign
 - [SQL Query Optimization Techniques](https://use-the-index-luke.com/)
 - [CTE Best Practices](https://modern-sql.com/use-case/select-from-cte)
 - [Query Execution Plans](https://www.postgresql.org/docs/current/sql-explain.html)
@@ -299,6 +232,7 @@ At the top of each file, document the purpose, the business metric it defines, w
 ### Key Takeaway
 
 If a metric matters to multiple consumers, define it once in a view. If the computation is too expensive to run live, pre-aggregate it into a table. That combination keeps dashboards trustworthy and fast.
+ business-visualisation-principles
 
 ## SQL-Based Insight Validation
 
@@ -484,6 +418,7 @@ Reference lines add context. A target line transforms a chart from "here is what
 - [Data-to-Viz](https://www.data-to-viz.com/)
 - [Colour Blindness Simulator](https://www.color-blindness.com/coblis-color-blindness-simulator/)
 - [Edward Tufte's Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi)
+ interactive-plotly-chart-design
 
 ## Interactive Plotly Chart Design
 
@@ -619,3 +554,8 @@ Use Plotly when the chart needs to answer follow-up questions without regenerati
 - [Streamlit Plotly Integration](https://docs.streamlit.io/library/api-reference/charts/st.plotly_chart)
 - [Plotly Buttons and Dropdowns](https://plotly.com/python/dropdowns/)
 - [Dash by Plotly](https://dash.plotly.com/)
+=======
+=======
+======main
+ main
+ main

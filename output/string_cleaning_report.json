@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-07-20T13:31:45.719860",
+  "columns_cleaned": [
+    "CloudService",
+    "ProjectID"
+  ],
+  "sample_values": {
+    "before": [
+      {
+        "CloudService": "AWS",
+        "ProjectID": "P001"
+      },
+      {
+        "CloudService": "Azure",
+        "ProjectID": "P002"
+      },
+      {
+        "CloudService": "GCP",
+        "ProjectID": "P003"
+      },
+      {
+        "CloudService": "AWS",
+        "ProjectID": "P001"
+      }
+    ],
+    "after": [
+      {
+        "CloudService": "AWS",
+        "ProjectID": "P001"
+      },
+      {
+        "CloudService": "Azure",
+        "ProjectID": "P002"
+      },
+      {
+        "CloudService": "GCP",
+        "ProjectID": "P003"
+      },
+      {
+        "CloudService": "AWS",
+        "ProjectID": "P001"
+      }
+    ]
+  }
+}

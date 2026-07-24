@@ -1,4 +1,6 @@
-Name,Marks,Branch
-Rahul,95,CSE
-Kiran,91,CSE
-Arjun,88,CSE
+Name,Marks,Branch,Joining_Date,Fees_Paid,Hosteller
+Rahul,95,CSE,2025-01-15,45000.0,True
+Anjali,82,IT,2025-02-20,38500.0,False
+Kiran,91,CSE,2025-03-10,42000.0,True
+Sneha,76,ECE,2025-04-05,36750.0,False
+Arjun,88,CSE,2025-05-12,41250.0,True

@@ -1,6 +1,6 @@
-Name,Marks,Branch
-Rahul,95,CSE
-Anjali,82,IT
-Kiran,91,CSE
-Sneha,76,ECE
-Arjun,88,CSE
+Name,Marks,Branch,Joining_Date,Fees_Paid,Hosteller
+Rahul,95,CSE,2025-01-15,"₹45,000",1
+Anjali,82,IT,2025-02-20,"₹38,500",0
+Kiran,91,CSE,2025-03-10,"₹42,000",1
+Sneha,76,ECE,2025-04-05,"₹36,750",0
+Arjun,88,CSE,2025-05-12,"₹41,250",1

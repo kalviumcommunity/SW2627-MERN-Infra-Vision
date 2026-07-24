@@ -1,22 +1,23 @@
 import json
 import os
-import chardet
-import pandas as pd
 from datetime import datetime
 
-try:
-    from .common import INTAKE_REPORT_FILE, RAW_DATA_FILE, ensure_output_dir
-except ImportError:
-    from common import INTAKE_REPORT_FILE, RAW_DATA_FILE, ensure_output_dir
+import pandas as pd
 
-INPUT_FILE = RAW_DATA_FILE
+try:
+    import chardet
+except ImportError:
+    chardet = None
+
+INPUT_FILE = "data/raw/cloud_data.csv"
+INTAKE_REPORT_FILE = "output/intake_report.json"
 
 EXPECTED_COLUMNS = [
     "BillingID",
     "ProjectID",
     "CloudService",
     "InfrastructureCost",
-    "CPUUsage"
+    "CPUUsage",
 ]
 
 
@@ -31,7 +32,7 @@ def validate_file_exists(filepath):
 
 
 def validate_file_format(filepath):
-    extension = filepath.suffix.lower().lstrip(".")
+    extension = filepath.split(".")[-1].lower()
 
     if extension not in ["csv"]:
         return False, "Unsupported file format"
@@ -50,25 +51,30 @@ def validate_schema(df):
 
 def detect_encoding(filepath):
     with open(filepath, "rb") as file:
-        result = chardet.detect(file.read())
+        raw = file.read()
 
-    return result["encoding"]
+    if chardet is not None:
+        result = chardet.detect(raw)
+        if result and result.get("encoding"):
+            return result["encoding"]
+
+    return "utf-8"
 
 
 def dataset_statistics(filepath, df):
     return {
         "rows": len(df),
         "columns": len(df.columns),
-        "file_size_mb": round(os.path.getsize(filepath)/(1024*1024),4)
+        "file_size_mb": round(os.path.getsize(filepath) / (1024 * 1024), 4),
     }
+
+
+def ensure_output_dir():
+    os.makedirs("output", exist_ok=True)
 
 
 def generate_report():
-
-    report = {
-        "timestamp": datetime.now().isoformat(),
-        "checks": {}
-    }
+    report = {"timestamp": datetime.now().isoformat(), "checks": {}}
 
     status, message = validate_file_exists(INPUT_FILE)
     report["checks"]["File Exists"] = message
@@ -88,7 +94,6 @@ def generate_report():
     report["checks"]["Schema"] = message
 
     report["checks"]["Encoding"] = detect_encoding(INPUT_FILE)
-
     report["Statistics"] = dataset_statistics(INPUT_FILE, df)
 
     ensure_output_dir()
@@ -99,8 +104,6 @@ def generate_report():
     return report
 
 
-if __name__=="__main__":
-
+if __name__ == "__main__":
     report = generate_report()
-
     print(report)
