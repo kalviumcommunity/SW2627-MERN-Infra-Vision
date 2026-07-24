@@ -232,4 +232,192 @@ At the top of each file, document the purpose, the business metric it defines, w
 ### Key Takeaway
 
 If a metric matters to multiple consumers, define it once in a view. If the computation is too expensive to run live, pre-aggregate it into a table. That combination keeps dashboards trustworthy and fast.
+ business-visualisation-principles
+
+## SQL-Based Insight Validation
+
+When a metric exists in both Python and SQL, the two layers must agree. If Python says 1,000 active users and SQL says 1,200, you have computation drift: one layer is wrong, or both are using different rules.
+
+### Why Validation Matters
+
+Metrics often drift because teams define the same concept in different places. A churn rate in SQL may include one set of conditions while a Python notebook uses another. Without validation, both numbers can look plausible while quietly disagreeing.
+
+### Common Drift Scenarios
+
+Typical causes of disagreement include:
+
+- Date handling differences between SQL date types and Python datetime objects
+- NULL versus NaN behavior in joins and calculations
+- Rounding differences between database logic and application logic
+- Timezone mismatches between UTC and local time
+- String case sensitivity differences across systems
+
+### A Simple Validation Workflow
+
+Validate the same metric in both layers and compare the outputs side by side:
+
+1. Compute the metric in SQL.
+2. Compute the same metric in Python.
+3. Compare the results and measure the difference.
+4. Investigate any mismatch that exceeds the allowed tolerance.
+5. Fix the incorrect layer and validate again.
+
+Example tolerance check:
+
+```python
+sql_value = 1200
+python_value = 1000
+tolerance = 0.01
+
+if abs(sql_value - python_value) > tolerance:
+	print("Validation failed: metric drift detected")
+else:
+	print("Validation passed")
+```
+
+### How To Investigate Differences
+
+When SQL and Python disagree, narrow the scope first:
+
+- Check whether the mismatch affects one row or all rows
+- Trace one specific record manually from raw data to final metric
+- Identify which layer matches the manual calculation
+- Correct the wrong rule and document why it changed
+
+If the issue is isolated, it is often a data quality problem. If the issue is systematic, it usually points to a logic mismatch.
+
+### Automating Validation
+
+Validation should run on a schedule, not only during debugging. Store validation outputs in a table or report, and alert the team when a metric crosses its threshold.
+
+Good automation practices include:
+
+- Run validation daily or after each pipeline refresh
+- Store results with timestamps so drift can be tracked over time
+- Send alerts when discrepancies exceed tolerance
+- Document expected differences so known exceptions do not become false alarms
+
+### Documentation Rules
+
+Every validated metric should have a written definition of what matches, what can differ, and why. That documentation should explain any intentional mismatch, such as SQL including refunds while Python excludes them by design.
+
+### Validation Checklist
+
+- Shared metrics are computed the same way in SQL and Python
+- Differences are measured against a clear tolerance
+- Manual tracing is used to resolve disagreements
+- Alerts exist for unexpected drift
+- Expected exceptions are documented in version control
+
+### Key Takeaway
+
+If a metric matters, validate it across layers before anyone uses it for reporting. Cross-checking SQL and Python is how you catch silent drift before it reaches dashboards and decision-makers.
+
+## Business Visualisation Principles
+
+Dashboard architecture is planned. The data layer is clean. The remaining task is to turn numbers into pictures that people understand instantly.
+
+Every chart type exists for a reason. Bar charts compare categories, line charts show trends, histograms reveal distributions, and scatter plots expose correlations. Choosing the wrong chart type makes the audience misread the data.
+
+### The Real Scenario
+
+An analyst presents quarterly revenue as a pie chart. Six product lines appear as slices. The CEO asks which product grew the most, but a pie chart shows proportion, not change over time. The analyst switches to a table of numbers. The meeting stalls while everyone scans rows and columns. The insight is buried and the decision is delayed.
+
+The fix is to match the chart type to the data relationship. Use a bar chart for comparison across categories, a line chart for trends over time, a histogram for distributions, a scatter plot for correlations, and a stacked bar chart for composition. Add complete labels and use a consistent colour palette so the audience can read the insight in seconds.
+
+### Choosing the Right Chart Type
+
+#### Bar Chart
+
+Use bar charts for comparison across categories such as revenue by product line, sales by region, or headcount by department. Horizontal bars work better when labels are long. Vertical bars work better when comparing only a few items.
+
+#### Line Chart
+
+Use line charts when a metric changes over a continuous axis, usually time. Revenue per month, active users per week, and churn rate per quarter all fit this pattern. Never use a line chart for categorical data.
+
+#### Histogram
+
+Use histograms to show the distribution of values such as order value ranges, customer age, or response time. They reveal skew, outliers, and bimodal patterns that averages hide.
+
+#### Scatter Plot
+
+Use scatter plots to explore whether two variables are related, such as marketing spend versus revenue or price versus demand. Each dot is one observation, and clusters or outliers become easy to see.
+
+#### Stacked Bar
+
+Use stacked bars when showing composition and part-to-whole relationships, such as revenue by quarter stacked by product or headcount by year stacked by department. Keep the number of segments small so the chart stays readable.
+
+### Complete Labelling
+
+A chart without labels is just a picture without meaning. Every chart needs a title that describes what the chart shows, not what it is. It also needs labelled axes with units, a legend for multi-series charts, and data labels when the chart is small enough to support them.
+
+Format numbers for human readability. Do not display 5200000 on an axis when $5.2M communicates the same meaning faster. Format dates as Jan 2024 for monthly charts instead of raw ISO dates.
+
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.barh(products, revenue, color='#1f77b4')
+ax.set_xlabel('Revenue ($)', fontsize=12)
+ax.set_ylabel('Product Line', fontsize=12)
+ax.set_title('Q4 Revenue by Product Line', fontsize=14, fontweight='bold')
+
+ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
+
+plt.tight_layout()
+plt.savefig('output/revenue_by_product.png', dpi=300, bbox_inches='tight')
+```
+
+### Consistent Colour Palette and Accessibility
+
+If Product A is blue in one chart, it should stay blue in every chart on the dashboard. Consistent colour creates a visual language and prevents the viewer from re-learning the legend on every screen.
+
+Define the palette once and reuse it everywhere.
+
+```python
+PALETTE = {
+	'primary': '#1f77b4',
+	'secondary': '#ff7f0e',
+	'success': '#2ca02c',
+	'danger': '#d62728',
+	'neutral': '#7f7f7f'
+}
+
+CHART_COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+
+ax.bar(categories, values, color=CHART_COLORS[:len(categories)])
+```
+
+Colour blindness accessibility matters too. Never rely on colour alone to convey meaning. Pair colour with shape, pattern, or text labels, and check whether the chart still works in greyscale.
+
+### Annotations
+
+Annotations turn charts into insight-delivery tools. Use them to highlight anomalies, thresholds, and events that explain the pattern.
+
+```python
+ax.annotate(
+	'Peak Sales\n($6.2M)',
+	xy=(peak_date, peak_value),
+	xytext=(peak_date, peak_value + 500000),
+	arrowprops=dict(arrowstyle='->', color='red', lw=2),
+	fontsize=11,
+	ha='center',
+	bbox=dict(boxstyle='round,pad=0.5', facecolor='yellow', alpha=0.7)
+)
+
+ax.axhline(y=5000000, color='green', linestyle='--', linewidth=2, label='Target')
+ax.legend()
+```
+
+Reference lines add context. A target line transforms a chart from "here is what happened" into "here is what happened relative to what should have happened." That context is what turns data into insight.
+
+### Bonus Resources
+
+- [Matplotlib Gallery](https://matplotlib.org/stable/gallery/index.html)
+- [Seaborn Tutorial](https://seaborn.pydata.org/tutorial.html)
+- [Data-to-Viz](https://www.data-to-viz.com/)
+- [Colour Blindness Simulator](https://www.color-blindness.com/coblis-color-blindness-simulator/)
+- [Edward Tufte's Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi)
+=======
 ======main
+ main
