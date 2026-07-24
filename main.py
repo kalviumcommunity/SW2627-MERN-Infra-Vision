@@ -18,12 +18,79 @@ def load_data():
 	return pd.read_csv(data_file), data_file
 
 
+def percent_change(current_value, baseline_value):
+	if baseline_value in (None, 0) or pd.isna(baseline_value) or pd.isna(current_value):
+		return None
+	return ((current_value - baseline_value) / baseline_value) * 100
+
+
+def format_value(value, kind):
+	if value is None or pd.isna(value):
+		return "N/A"
+	if kind == "count":
+		return f"{int(round(value)):,}"
+	if kind == "currency":
+		return f"${value:,.0f}"
+	if kind == "percent":
+		return f"{value:,.1f}%"
+	return f"{value:,.2f}"
+
+
+def render_kpi_cards(filtered, baseline):
+	metrics = [
+		{
+			"label": "Rows",
+			"kind": "count",
+			"current": len(filtered),
+			"baseline": len(baseline),
+			"delta_color": "normal",
+		},
+		{
+			"label": "Avg Infrastructure Cost",
+			"kind": "currency",
+			"current": filtered["InfrastructureCost"].mean() if "InfrastructureCost" in filtered.columns else None,
+			"baseline": baseline["InfrastructureCost"].mean() if "InfrastructureCost" in baseline.columns else None,
+			"delta_color": "inverse",
+		},
+		{
+			"label": "Avg CPU Usage",
+			"kind": "percent",
+			"current": filtered["CPUUsage"].mean() if "CPUUsage" in filtered.columns else None,
+			"baseline": baseline["CPUUsage"].mean() if "CPUUsage" in baseline.columns else None,
+			"delta_color": "normal",
+		},
+		{
+			"label": "Projects Covered",
+			"kind": "count",
+			"current": filtered["ProjectID"].nunique(dropna=True) if "ProjectID" in filtered.columns else None,
+			"baseline": baseline["ProjectID"].nunique(dropna=True) if "ProjectID" in baseline.columns else None,
+			"delta_color": "normal",
+		},
+		{
+			"label": "Services Covered",
+			"kind": "count",
+			"current": filtered["CloudService"].nunique(dropna=True) if "CloudService" in filtered.columns else None,
+			"baseline": baseline["CloudService"].nunique(dropna=True) if "CloudService" in baseline.columns else None,
+			"delta_color": "normal",
+		},
+	]
+
+	columns = st.columns(len(metrics))
+	for column, metric in zip(columns, metrics):
+		current_value = format_value(metric["current"], metric["kind"])
+		delta_pct = percent_change(metric["current"], metric["baseline"])
+		delta_text = None if delta_pct is None else f"{delta_pct:+.1f}%"
+		with column:
+			st.metric(metric["label"], current_value, delta=delta_text, delta_color=metric["delta_color"])
+
+
 def main():
 	st.set_page_config(page_title="InfraVision Dashboard", layout="wide")
 	st.title("InfraVision Interactive Dashboard")
 	st.caption("Interactive Plotly charts for cloud infrastructure billing data.")
 
 	df, data_file = load_data()
+	baseline = df.copy()
 
 	st.sidebar.header("Filters")
 	services = sorted(df["CloudService"].dropna().unique()) if "CloudService" in df.columns else []
@@ -43,10 +110,9 @@ def main():
 	group_options = [column for column in ["ProjectID", "CloudService", "BillingID"] if column in filtered.columns]
 	group_by = st.sidebar.selectbox("Group by", group_options) if group_options else None
 
-	col1, col2, col3 = st.columns(3)
-	col1.metric("Rows", f"{len(filtered):,}")
-	col2.metric("Projects", f"{filtered['ProjectID'].nunique():,}" if "ProjectID" in filtered.columns else "N/A")
-	col3.metric("Data source", data_file.name)
+	render_kpi_cards(filtered, baseline)
+	st.caption("KPI deltas compare the filtered view to the full dataset because the source data does not include a time column for period-over-period comparisons.")
+	st.divider()
 
 	if filtered.empty or metric is None or group_by is None:
 		st.warning("No rows match the selected filters or required columns are missing.")
